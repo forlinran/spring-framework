@@ -333,6 +333,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@Override
 	public ConfigurableEnvironment getEnvironment() {
 		if (this.environment == null) {
+			//StandardEnvironment父类构造器MutablePropertySources中调用的MutablePropertySources
 			this.environment = createEnvironment();
 		}
 		return this.environment;
