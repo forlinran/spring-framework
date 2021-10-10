@@ -293,6 +293,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 			// and on Tomcat only after the "*/" separator for its "war:" protocol.
 			int prefixEnd = (locationPattern.startsWith("war:") ? locationPattern.indexOf("*/") + 1 :
 					locationPattern.indexOf(':') + 1);
+			// getPathMatcher返回的AntPathMatcher对象可以看出是ant风格
 			if (getPathMatcher().isPattern(locationPattern.substring(prefixEnd))) {
 				// a file pattern
 				return findPathMatchingResources(locationPattern);
