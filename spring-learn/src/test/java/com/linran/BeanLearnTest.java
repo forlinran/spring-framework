@@ -4,6 +4,8 @@ import com.linran.bean.Logo;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Locale;
+
 public class BeanLearnTest {
 
 	@Test
@@ -14,5 +16,9 @@ public class BeanLearnTest {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
 		Logo logoP = context.getBean(Logo.class);
 		System.out.printf("this is logoP printf:%s%n",logoP.toString());
+	}
+
+	public static void main(String[] args) {
+		Locale locale = Locale.getDefault();
 	}
 }

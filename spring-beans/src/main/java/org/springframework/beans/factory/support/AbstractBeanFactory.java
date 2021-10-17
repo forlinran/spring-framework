@@ -274,6 +274,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
 
+			// 检查父容器
 			// Check if bean definition exists in this factory.
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
@@ -309,10 +310,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
+				// 当前bean依赖的bean
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
+						// 循环依赖检测
 						if (isDependent(beanName, dep)) {
 							throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 									"Circular depends-on relationship between '" + beanName + "' and '" + dep + "'");

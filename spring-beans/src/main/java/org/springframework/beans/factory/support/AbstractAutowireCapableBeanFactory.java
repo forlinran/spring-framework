@@ -539,6 +539,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
+			// 创建Bean
 			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Finished creating instance of bean '" + beanName + "'");
@@ -617,6 +618,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		try {
 			populateBean(beanName, mbd, instanceWrapper);
+			//初始化Bean，包括aware方法调用
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -1192,6 +1194,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (mbd.getFactoryMethodName() != null) {
+			// TODO 没看懂。
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
@@ -1219,6 +1222,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
+			//配置了<constructor-arg>子元素
 			return autowireConstructor(beanName, mbd, ctors, args);
 		}
 
@@ -1319,6 +1323,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			Object beanInstance;
 			if (System.getSecurityManager() != null) {
 				beanInstance = AccessController.doPrivileged(
+						//通过instantiate方法，反射实例化Bean
 						(PrivilegedAction<Object>) () -> getInstantiationStrategy().instantiate(mbd, beanName, this),
 						getAccessControlContext());
 			}
@@ -1788,6 +1793,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
+			// 调用aware方法进行初始化.
 			invokeAwareMethods(beanName, bean);
 		}
 
@@ -1797,6 +1803,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
+			// 调用初始化方法.
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {

@@ -1,6 +1,8 @@
 package com.linran.bean;
 
-public class Logo {
+import org.springframework.beans.factory.BeanNameAware;
+
+public class Logo implements BeanNameAware {
 	private String name = "panda";
 
 	public String getName() {
@@ -16,5 +18,10 @@ public class Logo {
 		return "Logo{" +
 				"name='" + name + '\'' +
 				'}';
+	}
+
+	@Override
+	public void setBeanName(String name) {
+		System.out.println("beanName" + name);
 	}
 }
