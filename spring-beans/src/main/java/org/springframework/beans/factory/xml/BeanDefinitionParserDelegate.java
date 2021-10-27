@@ -523,6 +523,7 @@ public class BeanDefinitionParserDelegate {
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
 			parseConstructorArgElements(ele, bd);
+			//填充字段值 例：age:23,name:"lin"
 			parsePropertyElements(ele, bd);
 			parseQualifierElements(ele, bd);
 
