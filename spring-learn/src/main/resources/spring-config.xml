@@ -17,5 +17,13 @@
 	<bean id="logoP" class="com.linran.bean.Logo" init-method="initMethod">
 		<property name="name" value="${logo.name}"/>
 	</bean>
+	<!--循环依赖-->
+	<bean id="a" class="com.linran.bean.CircleA">
+		<property name="b" ref="b"/>
+	</bean>
+
+	<bean id="b" class="com.linran.bean.CircleB">
+		<property name="a" ref="a"/>
+	</bean>
 
 </beans>

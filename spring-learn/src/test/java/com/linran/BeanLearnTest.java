@@ -1,5 +1,7 @@
 package com.linran;
 
+import com.linran.bean.CircleA;
+import com.linran.bean.CircleB;
 import com.linran.bean.Logo;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,7 +20,12 @@ public class BeanLearnTest {
 		System.out.printf("this is logoP printf:%s%n",logoP.toString());
 	}
 
-	public static void main(String[] args) {
-		Locale locale = Locale.getDefault();
+	@Test
+	public void circleDependencyTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
+		CircleA circleA = context.getBean(CircleA.class);
+		CircleB circleB = context.getBean(CircleB.class);
+		System.out.printf("this is circleA printf:%s%n",circleA.toString());
+		System.out.printf("this is circleB printf:%s%n",circleB.toString());
 	}
 }
