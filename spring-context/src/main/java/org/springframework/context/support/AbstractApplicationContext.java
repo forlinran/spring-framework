@@ -548,12 +548,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
+			// 准备刷新
 			prepareRefresh();
 
-			// Tell the subclass to refresh the internal bean factory. 备注：BeanFactory的创建，加载BeanDefinition
+			// Tell the subclass to refresh the internal bean factory.
+			// 加载xml文件属性值到beanFactory工厂中,BeantionDefinition
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			// beanFactory的准备工作，对各种属性填充
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -562,13 +565,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				// Invoke factory processors registered as beans in the context.
+				// 调用BeanFactory处理器，扩展功能 PlaceHolderConfigureSupport(替换value中的占位符)、ConfigurationClassPostProcessor、BeanPostProcessor
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
+				// 注册BeanPostProcessors
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
+				// 初始化国际化messageSrouce
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
@@ -578,6 +584,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				onRefresh();
 
 				// Check for listener beans and register them.
+				// 注册监听器
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.

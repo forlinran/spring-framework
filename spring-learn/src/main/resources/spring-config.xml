@@ -3,5 +3,19 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="logoP" class="com.linran.bean.Logo"/>
+	<!--配置文件配置-->
+	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>classpath:application.properties</value>
+			</array>
+		</property>
+	</bean>
+	<!--自定义BeanFactoryProcessor-->
+	<bean class="beanFactoryProcessor.LogoBeanFactoryPostProcessor"/>
+	<!--自定义bean-->
+	<bean id="logoP" class="com.linran.bean.Logo" init-method="initMethod">
+		<property name="name" value="${logo.name}"/>
+	</bean>
+
 </beans>

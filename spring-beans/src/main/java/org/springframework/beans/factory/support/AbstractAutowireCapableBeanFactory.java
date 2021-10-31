@@ -437,6 +437,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object result = existingBean;
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
+			// Spring Boot中的CommonAnnotationBeanPostProcessor实现类执行@PostConstruct方法
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
 			if (current == null) {
 				return result;
@@ -1325,7 +1326,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			Object beanInstance;
 			if (System.getSecurityManager() != null) {
 				beanInstance = AccessController.doPrivileged(
-						//通过instantiate方法，反射实例化Bean
+						//选择实例化策略，通过instantiate方法，反射实例化Bean
 						(PrivilegedAction<Object>) () -> getInstantiationStrategy().instantiate(mbd, beanName, this),
 						getAccessControlContext());
 			}
@@ -1803,12 +1804,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
-			// 调用before beanPostProcessors
+			// 调用before beanPostProcessors  注意：@PostConstruct的方法调用在此处，而非下面的invokeInitMethods
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
-			// 调用init-method初始化方法.
+			// 调用init-method初始化方法. InitializingBean#afterPropertiesSet
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
@@ -1817,7 +1818,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					beanName, "Invocation of init method failed", ex);
 		}
 		if (mbd == null || !mbd.isSynthetic()) {
-			// 调用after beanPostProcessors
+			// 调用after beanPostProcessors,代理类:AbstractAutoProxyCreator实现的在后置方法实现
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 
@@ -1873,6 +1874,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				}
 			}
 			else {
+				//调用实现initialBean#afterPropertiesSet方法
 				((InitializingBean) bean).afterPropertiesSet();
 			}
 		}
@@ -1882,6 +1884,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (StringUtils.hasLength(initMethodName) &&
 					!(isInitializingBean && "afterPropertiesSet".equals(initMethodName)) &&
 					!mbd.isExternallyManagedInitMethod(initMethodName)) {
+				// 调用xml中定义的init-method方法
 				invokeCustomInitMethod(beanName, bean, mbd);
 			}
 		}
@@ -1896,7 +1899,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected void invokeCustomInitMethod(String beanName, Object bean, RootBeanDefinition mbd)
 			throws Throwable {
-
+		//获取xml中定义的init-method名称
 		String initMethodName = mbd.getInitMethodName();
 		Assert.state(initMethodName != null, "No init method set");
 		Method initMethod = (mbd.isNonPublicAccessAllowed() ?
@@ -1939,6 +1942,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		else {
 			try {
+				//反射调用init-method
 				ReflectionUtils.makeAccessible(methodToInvoke);
 				methodToInvoke.invoke(bean);
 			}
