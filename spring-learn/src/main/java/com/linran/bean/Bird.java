@@ -1,16 +1,8 @@
 package com.linran.bean;
 
-public class CircleA {
+public class Bird {
 	private String name;
-	private CircleB b;
-
-	public CircleB getB() {
-		return b;
-	}
-
-	public void setB(CircleB b) {
-		this.b = b;
-	}
+	private String mark;
 
 	public String getName() {
 		return name;
@@ -18,5 +10,13 @@ public class CircleA {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getMark() {
+		return mark;
+	}
+
+	public void setMark(String mark) {
+		this.mark = mark;
 	}
 }
