@@ -941,7 +941,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
-					//新创建的Bean走这里
+					//没有实现BeanFactory接口的对象创建，默认都走这里
 					getBean(beanName);
 				}
 			}
