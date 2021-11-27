@@ -1,13 +1,8 @@
 package com.linran;
 
-import com.linran.bean.Bird;
-import com.linran.bean.CircleA;
-import com.linran.bean.CircleB;
-import com.linran.bean.Logo;
+import com.linran.bean.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.Locale;
 
 public class BeanLearnTest {
 
@@ -16,9 +11,10 @@ public class BeanLearnTest {
 //      注释掉的代码在getEnvironment().resolveRequiredPlaceholders的时候会进行placeholder解析
 //		System.setProperty("spring", "classpath");
 //		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("${spring}:config.xml");
+//		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml","classpath:spring-${username}.xml");
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
 		Logo logoP = context.getBean(Logo.class);
-		System.out.printf("this is logoP printf:%s%n",logoP.toString());
+		System.out.printf("this is logoP printf:%s%n", logoP.toString());
 	}
 
 	@Test
@@ -26,8 +22,8 @@ public class BeanLearnTest {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
 		CircleA circleA = context.getBean(CircleA.class);
 		CircleB circleB = context.getBean(CircleB.class);
-		System.out.printf("this is circleA printf:%s%n",circleA.toString());
-		System.out.printf("this is circleB printf:%s%n",circleB.toString());
+		System.out.printf("this is circleA printf:%s%n", circleA.toString());
+		System.out.printf("this is circleB printf:%s%n", circleB.toString());
 	}
 
 	/**
@@ -41,5 +37,15 @@ public class BeanLearnTest {
 		//容器创建好后，容器中是没有Bird对象，但是会有myFactoryBeanObject对象，在实际调用getBean的时候先获取对应的FactoryBean对象，然后再是执行getObject对象
 		Bird bird = (Bird) context.getBean("myFactoryBeanObject");
 		System.out.println(bird);
+	}
+
+
+
+	//其他一些小demo
+	@Test
+	public void applicationContext() {
+		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:spring-config.xml");
+		Logo logoP = context.getBean(Logo.class);
+		System.out.printf("this is logoP printf:%s%n", logoP.toString());
 	}
 }
