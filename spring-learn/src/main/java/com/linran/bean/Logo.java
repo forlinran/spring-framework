@@ -5,8 +5,13 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Logo implements BeanNameAware, ApplicationContextAware {
 	private String name = "panda";
+
+	private List<String> features;
 
 	public void initMethod() {
 		System.out.println("自定义初始化方法");
@@ -18,6 +23,17 @@ public class Logo implements BeanNameAware, ApplicationContextAware {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Logo(String name) {
+		this.name = name;
+	}
+
+	public Logo(List<String> features) {
+		this.features = features;
+	}
+
+	public Logo() {
 	}
 
 	@Override

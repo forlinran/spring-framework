@@ -14,8 +14,21 @@
 	<!--自定义BeanFactoryProcessor-->
 	<bean class="beanFactoryProcessor.LogoBeanFactoryPostProcessor"/>
 	<!--自定义bean-->
-	<bean id="logoP" class="com.linran.bean.Logo" init-method="initMethod">
+	<!--自定义bean-->
+	<bean id="logoP" name="logoName,;logAliasOne,;logAliasTwo" class="com.linran.bean.Logo" init-method="initMethod">
+		<description>jian dande miao shu</description>
+<!--		<constructor-arg index="0" value="logP index"/>-->
+		<constructor-arg index="0">
+			<list>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</list>
+		</constructor-arg>
+<!--		<lookup-method/>-->
+<!--		<replaced-method/>-->
 		<property name="name" value="${logo.name}"/>
+		<meta key="metaK1" value="metaV1"/>
 	</bean>
 	<!--循环依赖-->
 	<bean id="a" class="com.linran.bean.CircleA">

@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import groovy.lang.GroovyClassLoader;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.util.ReflectionUtils;
 

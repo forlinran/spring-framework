@@ -18,7 +18,6 @@ package org.springframework.context.annotation.configuration;
 
 import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
