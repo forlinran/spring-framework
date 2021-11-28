@@ -41,23 +41,24 @@ abstract class AbstractPropertyLoadingBeanDefinitionParser extends AbstractSingl
 
 	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+		// 解析location属性
 		String location = element.getAttribute("location");
 		if (StringUtils.hasLength(location)) {
 			location = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(location);
 			String[] locations = StringUtils.commaDelimitedListToStringArray(location);
 			builder.addPropertyValue("locations", locations);
 		}
-
+		// 解析properties-ref属性
 		String propertiesRef = element.getAttribute("properties-ref");
 		if (StringUtils.hasLength(propertiesRef)) {
 			builder.addPropertyReference("properties", propertiesRef);
 		}
-
+		// 解析file-encoding属性
 		String fileEncoding = element.getAttribute("file-encoding");
 		if (StringUtils.hasLength(fileEncoding)) {
 			builder.addPropertyValue("fileEncoding", fileEncoding);
 		}
-
+		// 解析order属性
 		String order = element.getAttribute("order");
 		if (StringUtils.hasLength(order)) {
 			builder.addPropertyValue("order", Integer.valueOf(order));

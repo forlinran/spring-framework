@@ -67,7 +67,7 @@ class PropertyPlaceholderBeanDefinitionParser extends AbstractPropertyLoadingBea
 				!systemPropertiesModeName.equals(SYSTEM_PROPERTIES_MODE_DEFAULT)) {
 			builder.addPropertyValue("systemPropertiesModeName", "SYSTEM_PROPERTIES_MODE_" + systemPropertiesModeName);
 		}
-
+		// 属性设值
 		if (element.hasAttribute("value-separator")) {
 			builder.addPropertyValue("valueSeparator", element.getAttribute("value-separator"));
 		}
