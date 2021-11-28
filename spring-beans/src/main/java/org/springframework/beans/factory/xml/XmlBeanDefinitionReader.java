@@ -512,7 +512,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		// 对xml BeanDefinition进行解析
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		int countBefore = getRegistry().getBeanDefinitionCount();
-		// 完成具体的解析过程
+		// 完成具体的解析过程，创建readerContext上下文的时，同时创建了默认命名空间解析器NameSpaceHandlerResolver
+		// 默认命名空间解析器资源加载目录 META-INF/spring.handlers
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}

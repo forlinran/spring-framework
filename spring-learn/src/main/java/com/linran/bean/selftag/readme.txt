@@ -1,0 +1,16 @@
+自定义标签步骤:
+1.创建对应的解析处理器handler(在init中添加各种标签的parser)
+2.创建一个spring handler配置文件，让应用程序能够完成加载工作
+3.自定义标签parser类
+4.配置上面1.中的handler需要写进spring.schemas，并把对应的xsd写进spring.handlers
+5.spring-config.xml中引入如下命名空间，并设置属性
+
+备注:
+1.命名空间
+方法：loadBeanDefinitions(DefaultListableBeanFactory beanFactory)
+说明：创建了BeanDefinitionReader，并在setEntityResolver的时候new了一个ResourceEntityResolver对象，ResourceEntityResolver的父类
+构造器中可以看到PluggableSchemaResolver对象的构造器中有命名空间资源文件的加载目标文件META-INF/spring.schemas
+2.命名空间对应的Handler
+方法：registerBeanDefinitions(Document doc, Resource resource)
+说明：创建了documentReader，并在registerBeanDefinitions方法的时候通过createReaderContext#getNamespaceHandlerResolver创建了一个
+默认的命名空间解析处理器DefaultNamespaceHandlerResolver，通过构造器同样可以找到对应的handler资源目标文件META-INF/spring.handlers

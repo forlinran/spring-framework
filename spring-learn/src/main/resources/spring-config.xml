@@ -2,9 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:context="http://www.springframework.org/schema/context"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+	   xmlns:linran="http://www.linran.org/schema/linran"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.linran.org/schema/linran http://www.linran.org/schema/linran.xsd">
 
+	<!--官方自定义标签解析 beanDefinition-->
 	<context:property-placeholder location="db.properties"/>
+	<!--自定义标签解析 TODO 无法将spring.handlers还有spring.schemas加载进容器中-->
+<!--	<linran:student id="linran" name="林然" email="linran@163.email" hobby="爱好"/>-->
 	<!--配置文件配置-->
 	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="locations">
@@ -15,7 +21,6 @@
 	</bean>
 	<!--自定义BeanFactoryProcessor-->
 	<bean class="beanFactoryProcessor.LogoBeanFactoryPostProcessor"/>
-	<!--自定义bean-->
 	<!--自定义bean-->
 	<bean id="logoP" name="logoName,;logAliasOne,;logAliasTwo" class="com.linran.bean.Logo" init-method="initMethod">
 		<description>jian dande miao shu</description>
@@ -32,6 +37,8 @@
 		<property name="name" value="${logo.name}"/>
 		<meta key="metaK1" value="metaV1"/>
 	</bean>
+
+
 	<!--循环依赖-->
 	<bean id="a" class="com.linran.bean.CircleA">
 		<property name="b" ref="b"/>
