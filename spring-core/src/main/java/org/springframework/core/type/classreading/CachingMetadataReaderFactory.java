@@ -120,6 +120,7 @@ public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 			// No synchronization necessary...
 			MetadataReader metadataReader = this.metadataReaderCache.get(resource);
 			if (metadataReader == null) {
+				// SimpleAnnotationMetadataReadingVisitor通过父类ClassReader获取class信息(ASM方式)
 				metadataReader = super.getMetadataReader(resource);
 				this.metadataReaderCache.put(resource, metadataReader);
 			}

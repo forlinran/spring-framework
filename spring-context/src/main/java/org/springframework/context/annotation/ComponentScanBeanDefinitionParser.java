@@ -90,6 +90,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		// Actually scan for bean definitions and register them.
 		// 获取类扫描器
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
+		// 根据basePackage还有filter配置需要扫描的注解进行扫描
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 
@@ -103,7 +104,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		// Delegate bean definition registration to scanner class.
-		// 创建类扫描器，添加需要扫描Component元注解
+		// 创建类扫描器，默认添加需要扫描Component元注解
 		ClassPathBeanDefinitionScanner scanner = createScanner(parserContext.getReaderContext(), useDefaultFilters);
 		scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
 		scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
@@ -125,7 +126,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		catch (Exception ex) {
 			parserContext.getReaderContext().error(ex.getMessage(), parserContext.extractSource(element), ex.getCause());
 		}
-
+		// 需要扫描或者排除的注解类型
 		parseTypeFilters(element, scanner, parserContext);
 
 		return scanner;
@@ -211,10 +212,12 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 				String localName = parserContext.getDelegate().getLocalName(node);
 				try {
 					if (INCLUDE_FILTER_ELEMENT.equals(localName)) {
+						// 需要扫描的注解
 						TypeFilter typeFilter = createTypeFilter((Element) node, classLoader, parserContext);
 						scanner.addIncludeFilter(typeFilter);
 					}
 					else if (EXCLUDE_FILTER_ELEMENT.equals(localName)) {
+						// 需要排除的注解
 						TypeFilter typeFilter = createTypeFilter((Element) node, classLoader, parserContext);
 						scanner.addExcludeFilter(typeFilter);
 					}

@@ -46,8 +46,10 @@ final class SimpleMetadataReader implements MetadataReader {
 
 	SimpleMetadataReader(Resource resource, @Nullable ClassLoader classLoader) throws IOException {
 		SimpleAnnotationMetadataReadingVisitor visitor = new SimpleAnnotationMetadataReadingVisitor(classLoader);
+		// 比反射更快！使用ASM获取class信息（ClassReader）
 		getClassReader(resource).accept(visitor, PARSING_OPTIONS);
 		this.resource = resource;
+		// 返回visitor解析出的metadata内容
 		this.annotationMetadata = visitor.getMetadata();
 	}
 

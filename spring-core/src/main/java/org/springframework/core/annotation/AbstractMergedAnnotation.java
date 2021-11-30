@@ -46,6 +46,7 @@ abstract class AbstractMergedAnnotation<A extends Annotation> implements MergedA
 
 	@Override
 	public boolean isMetaPresent() {
+		// 元注解index > 0
 		return isPresent() && getDistance() > 0;
 	}
 

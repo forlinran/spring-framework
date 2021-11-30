@@ -313,6 +313,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			return addCandidateComponentsFromIndex(this.componentsIndex, basePackage);
 		}
 		else {
+			// 扫描并返回符合条件的class，以ScannedGenericBeanDefinition封装对象返回
 			return scanCandidateComponents(basePackage);
 		}
 	}
@@ -427,7 +428,9 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
+						// 底层使用ASM获取class信息（ClassReader），这里metadataReader就是解析出的内容
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
+						// 默认判断是否含有@Component元注解，以及@Conditional元注解条件是否满足
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setSource(resource);
@@ -493,7 +496,9 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			}
 		}
 		for (TypeFilter tf : this.includeFilters) {
+			// 判断当前class是否含有对应注解，或者元注解中包含该注解
 			if (tf.match(metadataReader, getMetadataReaderFactory())) {
+				// @conditional注解条件判断
 				return isConditionMatch(metadataReader);
 			}
 		}

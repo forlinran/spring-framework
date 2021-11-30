@@ -510,6 +510,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 			if (rootDirUrl.getProtocol().startsWith(ResourceUtils.URL_PROTOCOL_VFS)) {
 				result.addAll(VfsResourceMatchingDelegate.findMatchingResources(rootDirUrl, subPattern, getPathMatcher()));
 			}
+			// jar文件处理，扫描jar内目录rootDirUrl(basePackage)下的所有class
 			else if (ResourceUtils.isJarURL(rootDirUrl) || isJarResource(rootDirResource)) {
 				result.addAll(doFindPathMatchingJarResources(rootDirResource, rootDirUrl, subPattern));
 			}
@@ -649,11 +650,14 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 				rootEntryPath = rootEntryPath + "/";
 			}
 			Set<Resource> result = new LinkedHashSet<>(8);
+			// 循环jar包内所有资源文件
 			for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
 				JarEntry entry = entries.nextElement();
 				String entryPath = entry.getName();
+				// 满足rootEntryPath（basePackage）则重点关注
 				if (entryPath.startsWith(rootEntryPath)) {
 					String relativePath = entryPath.substring(rootEntryPath.length());
+					// 如果是class文件，则添加进result
 					if (getPathMatcher().match(subPattern, relativePath)) {
 						result.add(rootDirResource.createRelative(relativePath));
 					}

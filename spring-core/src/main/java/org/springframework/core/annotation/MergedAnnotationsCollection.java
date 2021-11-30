@@ -149,7 +149,7 @@ final class MergedAnnotationsCollection implements MergedAnnotations {
 	public <A extends Annotation> MergedAnnotation<A> get(String annotationType,
 			@Nullable Predicate<? super MergedAnnotation<A>> predicate,
 			@Nullable MergedAnnotationSelector<A> selector) {
-
+		// 往上寻找元注解annotationType
 		MergedAnnotation<A> result = find(annotationType, predicate, selector);
 		return (result != null ? result : MergedAnnotation.missing());
 	}
