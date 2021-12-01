@@ -90,8 +90,9 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		// Actually scan for bean definitions and register them.
 		// 获取类扫描器
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
-		// 根据basePackage还有filter配置需要扫描的注解进行扫描
+		// 根据basePackage进行扫描，并将beanDefinition注册进IOC容器
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
+		// 注册annotation需要的一些post processor beanDefinition
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 
 		return null;
@@ -126,7 +127,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		catch (Exception ex) {
 			parserContext.getReaderContext().error(ex.getMessage(), parserContext.extractSource(element), ex.getCause());
 		}
-		// 需要扫描或者排除的注解类型
+		// 需要扫描或者排除的注解类型includeFilters&excludeFilters
 		parseTypeFilters(element, scanner, parserContext);
 
 		return scanner;
@@ -154,12 +155,13 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		}
 		if (annotationConfig) {
 			Set<BeanDefinitionHolder> processorDefinitions =
+					// 往IOC容器中注入annotation相关的post processor beanDefinition
 					AnnotationConfigUtils.registerAnnotationConfigProcessors(readerContext.getRegistry(), source);
 			for (BeanDefinitionHolder processorDefinition : processorDefinitions) {
 				compositeDef.addNestedComponent(new BeanComponentDefinition(processorDefinition));
 			}
 		}
-
+		// 当前为空实现
 		readerContext.fireComponentRegistered(compositeDef);
 	}
 

@@ -278,18 +278,24 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
+				// 优先使用注解上设置的beanName，没有就默认通过className生成
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
+					// 处理一些公共属性标签,例：Lazy,Primary,Role... ...
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+				// 通过beanName检查beanDefinitionMap是否重复
 				if (checkCandidate(beanName, candidate)) {
+					// 封装beanDefinitionHolder对象
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					definitionHolder =
+							// 如若需要则创建代理beanDefinition
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					// 注册beanDefinition进IOC容器
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}
