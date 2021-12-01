@@ -1005,6 +1005,7 @@ public class BeanDefinitionParserDelegate {
 	@Nullable
 	public Object parsePropertySubElement(Element ele, @Nullable BeanDefinition bd, @Nullable String defaultValueType) {
 		if (!isDefaultNamespace(ele)) {
+			// 解析自定义标签
 			return parseNestedCustomElement(ele, bd);
 		}
 		// 解析bean子元素
