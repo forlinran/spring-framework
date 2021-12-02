@@ -2,16 +2,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:linran="http://www.linran.com/custag/linran"
+	   xmlns:linran="https://www.linran.com/custag/linran"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
-	   http://www.linran.com/custag/linran http://www.linran.com/custag/linran/linran-student.xsd">
+	   https://www.linran.com/custag/linran https://www.linran.com/custag/linran/linran-student.xsd
+	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!--官方自定义标签解析 beanDefinition-->
 	<context:property-placeholder location="db.properties"/>
 	<context:component-scan base-package="com.linran.bean.service"/>
-	<!--自定义标签解析 TODO 无法将spring.handlers还有spring.schemas加载进容器中-->
-<!--	<linran:student id="lll" name="林然" email="linran@163.email" hobby="爱好"/>-->
+	<!--自定义标签解析 无法将spring.handlers还有spring.schemas加载进容器中:尝试新建一个项目是可行的，大概spring-learn模块创建方式有点问题-->
+<!--	<linran:student id="student" name="林然" email="linran@163.email" hobby="爱好"/>-->
 	<!--配置文件配置-->
 	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="locations">

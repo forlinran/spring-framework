@@ -1,9 +1,18 @@
 package com.linran.bean.selftag;
 
 public class Student {
+	private String id;
 	private String name;
 	private String email;
 	private String hobby;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;

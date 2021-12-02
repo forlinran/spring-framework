@@ -17,7 +17,7 @@ public class StudentBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 	@Override
 	protected void doParse(Element element, BeanDefinitionBuilder builder) {
 		if (element.hasAttribute("id")) {
-			builder.addPropertyValue("id", Long.valueOf(element.getAttribute("id")));
+			builder.addPropertyValue("id", element.getAttribute("id"));
 		}
 		if (element.hasAttribute("name")) {
 			builder.addPropertyValue("name", element.getAttribute("name"));
