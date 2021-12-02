@@ -161,8 +161,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		this.registry = registry;
-
+		// 使用默认注解
 		if (useDefaultFilters) {
+			// 默认添加@Component元注解，注意Repository,Service,Controller因含有Component元注解，这里也会被扫描到
 			registerDefaultFilters();
 		}
 		setEnvironment(environment);
@@ -273,7 +274,8 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
 		for (String basePackage : basePackages) {
-			// 扫描并返回符合条件的class，以ScannedGenericBeanDefinition封装对象返回
+			// 实际扫描过程
+			// 扫描并返回符合条件的class，以ScannedGenericBeanDefinition封装对象返回,重要
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
