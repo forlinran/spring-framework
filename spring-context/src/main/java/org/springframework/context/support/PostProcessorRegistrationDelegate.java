@@ -73,6 +73,8 @@ final class PostProcessorRegistrationDelegate {
 		// https://github.com/spring-projects/spring-framework/issues?q=PostProcessorRegistrationDelegate+is%3Aclosed+label%3A%22status%3A+declined%22
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+		// 无论是什么情况，优先执行BeanDefinitionRegistryPostProcessors
+		// 将已经执行过的BFPP存储在processedBeans中，防止重复执行
 		Set<String> processedBeans = new HashSet<>();
 
 		if (beanFactory instanceof BeanDefinitionRegistry) {

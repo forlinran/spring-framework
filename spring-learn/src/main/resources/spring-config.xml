@@ -10,8 +10,8 @@
 	<!--官方自定义标签解析 beanDefinition-->
 	<context:property-placeholder location="db.properties"/>
 	<context:component-scan base-package="com.linran.bean.service"/>
-	<!--自定义标签解析 无法将spring.handlers还有spring.schemas加载进容器中:尝试新建一个项目是可行的，大概spring-learn模块创建方式有点问题-->
-<!--	<linran:student id="student" name="林然" email="linran@163.email" hobby="爱好"/>-->
+	<!--自定义标签解析 无法将spring.handlers还有spring.schemas加载进容器中:gradle.doc中的代码注释后已解决-->
+	<linran:student id="student" name="林然" email="linran@163.email" hobby="爱好"/>
 	<!--配置文件配置-->
 	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="locations">

@@ -174,6 +174,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	public AbstractAutowireCapableBeanFactory() {
 		super();
+		// 设置要忽略的接口#在invokeAwareMethod中有调用
 		ignoreDependencyInterface(BeanNameAware.class);
 		ignoreDependencyInterface(BeanFactoryAware.class);
 		ignoreDependencyInterface(BeanClassLoaderAware.class);
@@ -581,7 +582,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 反射实例化bean
+			// 反射实例化bean，包括一些PropertyEditor注册
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -1335,6 +1336,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				beanInstance = getInstantiationStrategy().instantiate(mbd, beanName, this);
 			}
 			BeanWrapper bw = new BeanWrapperImpl(beanInstance);
+			// 注册PropertyEditor
 			initBeanWrapper(bw);
 			return bw;
 		}
@@ -1418,11 +1420,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		int resolvedAutowireMode = mbd.getResolvedAutowireMode();
 		if (resolvedAutowireMode == AUTOWIRE_BY_NAME || resolvedAutowireMode == AUTOWIRE_BY_TYPE) {
 			MutablePropertyValues newPvs = new MutablePropertyValues(pvs);
-			// Add property values based on autowire by name if applicable. 通过名称装配
+			// Add property values based on autowire by name if applicable.
+			// 通过名称装配
 			if (resolvedAutowireMode == AUTOWIRE_BY_NAME) {
 				autowireByName(beanName, mbd, bw, newPvs);
 			}
-			// Add property values based on autowire by type if applicable. 通过类型装配
+			// Add property values based on autowire by type if applicable.
+			// 通过类型装配
 			if (resolvedAutowireMode == AUTOWIRE_BY_TYPE) {
 				autowireByType(beanName, mbd, bw, newPvs);
 			}
@@ -1696,6 +1700,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (converter == null) {
 			converter = bw;
 		}
+		// 获取所有的PropertyEditors
 		BeanDefinitionValueResolver valueResolver = new BeanDefinitionValueResolver(this, beanName, mbd, converter);
 
 		// Create a deep copy(深拷贝), resolving any references for values.
@@ -1721,6 +1726,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				boolean convertible = bw.isWritableProperty(propertyName) &&
 						!PropertyAccessorUtils.isNestedOrIndexedProperty(propertyName);
 				if (convertible) {
+					// 属性转换#PropertyEditor
 					convertedValue = convertForProperty(resolvedValue, propertyName, bw, converter);
 				}
 				// Possibly store converted value in merged bean definition,

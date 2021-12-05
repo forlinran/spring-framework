@@ -1,6 +1,7 @@
 package com.linran;
 
 import com.linran.bean.*;
+import com.linran.bean.selfeditor.Customer;
 import com.linran.bean.selftag.Student;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.xml.PluggableSchemaResolver;
@@ -42,19 +43,43 @@ public class BeanLearnTest {
 	}
 
 	/**
+	 * 位置
+	 * obtainFreshBeanFactory#refreshBeanFactory#loadBeanDefinitions...
+	 * {@link org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#parseBeanDefinitions->delegate.parseCustomElement}
+	 *
 	 * 自定义标签解析测试
 	 * 1.官方定义的context:placeholder可以作为参考，debug定位到parseCustomElement可以看到
 	 * 		对应的Handler为:ContextNameSpaceHandler
 	 * 		本次示例的parser为:PropertyPlaceholderBeanDefinitionParser(在ContextNameSpaceHandler的init中进行注册)
+	 *
+	 * 	参考
+	 * @see org.springframework.context.config.ContextNamespaceHandler
+	 * 思考：什么时候配置好的，什么时候开始加载的，什么时候开始真正doParse
 	 */
 	@Test
 	public void customerTagTest() {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
 		//容器创建好后，容器中是没有Bird对象，但是会有myFactoryBeanObject对象，在实际调用getBean的时候先获取对应的FactoryBean对象，然后再是执行getObject对象
-		Student student = context.getBean("linran", Student.class);
+		Student student = context.getBean("student", Student.class);
 		System.out.println(student);
 	}
 
+	/**
+	 * 位置
+	 *  注册：prepareBeanFactory->beanFactory.addPropertyEditorRegistrar
+	 *
+	 * 参考
+	 * @see org.springframework.jmx.export.CustomDateEditorRegistrar
+	 *
+	 * 思考：什么时候配置好的，什么时候开始注册PropertyEditor的，什么时候开始真正setAsText
+	 */
+	@Test
+	public void customerPropertyEditor() {
+		//customEditorConfigurer
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-selfeditor.xml");
+		//容器创建好后，容器中是没有Bird对象，但是会有myFactoryBeanObject对象，在实际调用getBean的时候先获取对应的FactoryBean对象，然后再是执行getObject对象
+		Customer customer = context.getBean("customer", Customer.class);
+	}
 
 	//其他一些小demo
 	@Test

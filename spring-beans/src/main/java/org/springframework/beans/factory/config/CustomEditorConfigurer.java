@@ -142,11 +142,14 @@ public class CustomEditorConfigurer implements BeanFactoryPostProcessor, Ordered
 
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		// 两种方式注册 可以结合当前类注解查看
+		// 方式一：通过注册类委派注册propertyEditorRegistrars
 		if (this.propertyEditorRegistrars != null) {
 			for (PropertyEditorRegistrar propertyEditorRegistrar : this.propertyEditorRegistrars) {
 				beanFactory.addPropertyEditorRegistrar(propertyEditorRegistrar);
 			}
 		}
+		// 方式二：直接将PropertyEditor注册进customEditors
 		if (this.customEditors != null) {
 			this.customEditors.forEach(beanFactory::registerCustomEditor);
 		}

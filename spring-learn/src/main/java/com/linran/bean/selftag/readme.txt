@@ -1,6 +1,6 @@
 自定义标签步骤:
-1.创建对应的解析处理器handler(在init中添加各种标签的parser)
-2.创建一个spring handler配置文件，让应用程序能够完成加载工作
+1.创建对应的解析处理器handler类(在init中添加各种标签的parser)
+2.创建一个spring.handlers配置文件，让应用程序能够完成加载工作
 3.自定义标签parser类
 4.配置上面1.中的handler需要写进spring.schemas，并把对应的xsd写进spring.handlers
 5.spring-config.xml中引入如下命名空间，并设置属性

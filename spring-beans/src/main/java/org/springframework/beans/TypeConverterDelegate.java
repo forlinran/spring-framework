@@ -115,7 +115,7 @@ class TypeConverterDelegate {
 	public <T> T convertIfNecessary(@Nullable String propertyName, @Nullable Object oldValue, @Nullable Object newValue,
 			@Nullable Class<T> requiredType, @Nullable TypeDescriptor typeDescriptor) throws IllegalArgumentException {
 
-		// Custom editor for this type?
+		// Custom editor for this type? 寻找自定义PropertyEditor
 		PropertyEditor editor = this.propertyEditorRegistry.findCustomEditor(requiredType, propertyName);
 
 		ConversionFailedException conversionAttemptEx = null;

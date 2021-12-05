@@ -80,7 +80,9 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 		this.propertyResolver = propertyResolver;
 	}
 
-
+	/*注册各种属性编辑器 CustomEditorConfigurer
+	* 	属性编辑需要实现PropertyEditorSupport#setAsText，自定义扩展的PropertyEditorSupport通过实现PropertyEditorRegistrar注册类，
+	* 	注入到CustomEditorConfigurer#propertyEditorRegistrars属性字段中*/
 	/**
 	 * Populate the given {@code registry} with the following resource editors:
 	 * ResourceEditor, InputStreamEditor, InputSourceEditor, FileEditor, URLEditor,
