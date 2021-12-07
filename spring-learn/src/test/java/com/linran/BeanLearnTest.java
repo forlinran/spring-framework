@@ -66,8 +66,9 @@ public class BeanLearnTest {
 
 	/**
 	 * 位置
-	 *  注册：prepareBeanFactory->beanFactory.addPropertyEditorRegistrar
-	 *
+	 *  核心方法：prepareBeanFactory->beanFactory.addPropertyEditorRegistrar
+	 *	实际注册时机：populateBean前的initBeanWrapper方法将editor注册到当前BeanWrapper
+	 *  实际处理：populateBean属性字段填充时applyPropertyValues方法
 	 * 参考
 	 * @see org.springframework.jmx.export.CustomDateEditorRegistrar
 	 *
