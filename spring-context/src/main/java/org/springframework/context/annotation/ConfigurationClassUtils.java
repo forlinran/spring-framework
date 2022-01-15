@@ -84,13 +84,14 @@ abstract class ConfigurationClassUtils {
 	 */
 	public static boolean checkConfigurationClassCandidate(
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
-
+		// 获取全限定名
 		String className = beanDef.getBeanClassName();
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
 
 		AnnotationMetadata metadata;
+		// 注解Bean定义信息
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
@@ -121,11 +122,12 @@ abstract class ConfigurationClassUtils {
 				return false;
 			}
 		}
-
+		// @Configuration信息
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		// isConfigurationCandidate是否添加有@Component,@ComponentScan,@Import,@ImportResource注解
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
@@ -154,7 +156,7 @@ abstract class ConfigurationClassUtils {
 		if (metadata.isInterface()) {
 			return false;
 		}
-
+		// 静态方法添加了@Component,@ComponentScan,@Import,@ImportResource注解
 		// Any of the typical annotations found?
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
