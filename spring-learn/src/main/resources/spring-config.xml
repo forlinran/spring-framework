@@ -51,4 +51,6 @@
 
 	<bean id="myFactoryBeanObject" class="com.linran.bean.MyFactoryBeanObject"/>
 
+	<!--自定义BD BFPP-->
+	<bean id="myBeanDefinitionBFPP" class="com.linran.bean.selfbdrpp.MyBeanDefinitionRegistryPostProcessor"/>
 </beans>

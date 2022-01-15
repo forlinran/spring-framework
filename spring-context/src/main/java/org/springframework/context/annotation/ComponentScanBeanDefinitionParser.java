@@ -156,6 +156,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		if (annotationConfig) {
 			Set<BeanDefinitionHolder> processorDefinitions =
 					// 往IOC容器中注入annotation相关的post processor beanDefinition
+					// ConfigurationClassPostProcessor、AutowiredAnnotationBeanPostProcessor的BeanDefinition信息就在此处添加进来的！！！
 					AnnotationConfigUtils.registerAnnotationConfigProcessors(readerContext.getRegistry(), source);
 			for (BeanDefinitionHolder processorDefinition : processorDefinitions) {
 				compositeDef.addNestedComponent(new BeanComponentDefinition(processorDefinition));
