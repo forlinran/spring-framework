@@ -9,7 +9,10 @@
 
 	<!--官方自定义标签解析 beanDefinition-->
 	<context:property-placeholder location="db.properties"/>
+	<!--打开自动扫描！！！ 添加ConfigurationClassPostProcessor增强器-->
 	<context:component-scan base-package="com.linran.bean.service"/>
+	<!--注解扫描-->
+	<bean class="com.linran.bean.config.MyScanBean"/>
 	<!--自定义标签解析 无法将spring.handlers还有spring.schemas加载进容器中:gradle.doc中的代码注释后已解决-->
 	<linran:student id="student" name="林然" email="linran@163.email" hobby="爱好"/>
 	<!--配置文件配置-->
