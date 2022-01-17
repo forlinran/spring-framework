@@ -190,6 +190,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 处理之前添加进的ImportSelector，例如Spring Boot自动装配AutoConfigurationImportSelector#selectImports方法延后在此处调用
 		this.deferredImportSelectorHandler.process();
 	}
 
@@ -315,7 +316,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
-		// 处理@Import注解
+		// 处理@Import注解，getImports递归含@Import元注解的注解拿取到需要导入加载的类
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -588,16 +589,20 @@ class ConfigurationClassParser {
 					if (candidate.isAssignable(ImportSelector.class)) {
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						Class<?> candidateClass = candidate.loadClass();
+						// 实例化ImportSelector实现类
 						ImportSelector selector = ParserStrategyUtils.instantiateClass(candidateClass, ImportSelector.class,
 								this.environment, this.resourceLoader, this.registry);
 						Predicate<String> selectorFilter = selector.getExclusionFilter();
 						if (selectorFilter != null) {
 							exclusionFilter = exclusionFilter.or(selectorFilter);
 						}
+						// 延后处理
 						if (selector instanceof DeferredImportSelector) {
+							// 添加进list，延后处理ImportSelector
 							this.deferredImportSelectorHandler.handle(configClass, (DeferredImportSelector) selector);
-						}
+						} // 即时处理
 						else {
+							// ImportSelector#selectImports返回需要装配的类
 							String[] importClassNames = selector.selectImports(currentSourceClass.getMetadata());
 							Collection<SourceClass> importSourceClasses = asSourceClasses(importClassNames, exclusionFilter);
 							// 递归处理，被Import进来的类也有可能含有@Import注解
@@ -616,8 +621,10 @@ class ConfigurationClassParser {
 					else {
 						// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar ->
 						// process it as an @Configuration class
+						// 处理最基础的@Configuration配置类
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
+						// 调用processConfigurationClass方法,内含configurationClasses.put
 						processConfigurationClass(candidate.asConfigClass(configClass), exclusionFilter);
 					}
 				}
@@ -798,6 +805,7 @@ class ConfigurationClassParser {
 					DeferredImportSelectorGroupingHandler handler = new DeferredImportSelectorGroupingHandler();
 					deferredImports.sort(DEFERRED_IMPORT_COMPARATOR);
 					deferredImports.forEach(handler::register);
+					// 执行SelectorImport
 					handler.processGroupImports();
 				}
 			}
@@ -827,9 +835,11 @@ class ConfigurationClassParser {
 		public void processGroupImports() {
 			for (DeferredImportSelectorGrouping grouping : this.groupings.values()) {
 				Predicate<String> exclusionFilter = grouping.getCandidateFilter();
+				// getImports中process方法处理，例如Spring Boot自动装配AutoConfigurationImportSelector返回META-INF/spring.factories内容
 				grouping.getImports().forEach(entry -> {
 					ConfigurationClass configurationClass = this.configurationClasses.get(entry.getMetadata());
 					try {
+						// 这里又调用了processImports方法!!!
 						processImports(configurationClass, asSourceClass(configurationClass, exclusionFilter),
 								Collections.singleton(asSourceClass(entry.getImportClassName(), exclusionFilter)),
 								exclusionFilter, false);

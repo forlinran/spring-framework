@@ -336,7 +336,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// parse!!! 解析带有@Controller、@Import、@ImportResource、@ComponentScan、@Bean的BeanDefinition
 			parser.parse(candidates);
 			parser.validate();
-
+			// 拿到解析结果集合，后续进行BeanDefinition注册
 			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
 			configClasses.removeAll(alreadyParsed);
 
@@ -346,6 +346,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
+			// 注册配置类相关所有的BeanDefinition信息
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();
