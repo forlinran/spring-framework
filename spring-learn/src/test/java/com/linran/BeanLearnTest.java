@@ -1,6 +1,8 @@
 package com.linran;
 
 import com.linran.bean.*;
+import com.linran.bean.methodoverrides.Fruit;
+import com.linran.bean.methodoverrides.FruitPlate;
 import com.linran.bean.selfeditor.Customer;
 import com.linran.bean.selftag.Student;
 import org.junit.jupiter.api.Test;
@@ -84,6 +86,28 @@ public class BeanLearnTest {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-selfeditor.xml");
 		//容器创建好后，容器中是没有Bird对象，但是会有myFactoryBeanObject对象，在实际调用getBean的时候先获取对应的FactoryBean对象，然后再是执行getObject对象
 		Customer customer = context.getBean("customer", Customer.class);
+	}
+
+	/**
+	 * spring中默认的对象都是单例的，spring会在一级缓存中持有该对象，
+	 * 方便下次直接获取,那么如果是原型作用域的话，会创建一个新的对象
+	 * 如果想在一个单例模式的bean下引用一个原型模式的bean,
+	 * 怎么办?在此时就需要引用lookup-method标签来解决此问题
+	 *
+	 * 如果apple&banana是原型模式，则每次都是getBean的时候获取最新的bean
+	 */
+	@Test
+	public void methodOverrides() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
+		//容器创建好后，容器中是没有Bird对象，但是会有myFactoryBeanObject对象，在实际调用getBean的时候先获取对应的FactoryBean对象，然后再是执行getObject对象
+		FruitPlate fruitplate1 = context.getBean("fruitplate1", FruitPlate.class);
+		Fruit fruit1 = fruitplate1.getFruit();
+		FruitPlate fruitplate2 = context.getBean("fruitplate2", FruitPlate.class);
+		Fruit fruit2 = fruitplate2.getFruit();
+
+		FruitPlate fruitplate3 = context.getBean("fruitplate1", FruitPlate.class);
+		Fruit fruit3 = fruitplate1.getFruit();
+		System.out.println("fruit3==fruit1 :"+ (fruit1==fruit3));
 	}
 
 	//其他一些小demo

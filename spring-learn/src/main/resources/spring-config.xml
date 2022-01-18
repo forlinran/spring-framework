@@ -66,4 +66,13 @@
 <!--			</set>-->
 <!--		</property>-->
 <!--	</bean>-->
+
+	<bean id="apple" class="com.linran.bean.methodoverrides.Apple"/>
+	<bean id="banana" class="com.linran.bean.methodoverrides.Banana"/>
+	<bean id="fruitplate1" class="com.linran.bean.methodoverrides.FruitPlate">
+		<lookup-method name="getFruit" bean="apple"/>
+	</bean>
+	<bean id="fruitplate2" class="com.linran.bean.methodoverrides.FruitPlate">
+		<lookup-method name="getFruit" bean="banana"/>
+	</bean>
 </beans>
