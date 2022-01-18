@@ -38,21 +38,24 @@ public class BeanLearnTest {
 	public void factoryBeanTest() {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
 		//容器创建好后，容器中是没有Bird对象，但是会有myFactoryBeanObject对象，在实际调用getBean的时候先获取对应的FactoryBean对象，然后再是执行getObject对象
-		Bird bird = (Bird) context.getBean("myFactoryBeanObject");
-		System.out.println(bird);
+		MyFactoryBeanObject myFactoryBeanObject = (MyFactoryBeanObject) context.getBean("&myFactoryBeanObject");
+		Bird bird1 = (Bird) context.getBean("myFactoryBeanObject");
+		Bird bird2 = (Bird) context.getBean("myFactoryBeanObject");
+		System.out.printf("bird1:%s  bird2:%s %n", bird1, bird2);
 	}
 
 	/**
 	 * 位置
 	 * obtainFreshBeanFactory#refreshBeanFactory#loadBeanDefinitions...
 	 * {@link org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#parseBeanDefinitions->delegate.parseCustomElement}
-	 *
+	 * <p>
 	 * 自定义标签解析测试
 	 * 1.官方定义的context:placeholder可以作为参考，debug定位到parseCustomElement可以看到
-	 * 		对应的Handler为:ContextNameSpaceHandler
-	 * 		本次示例的parser为:PropertyPlaceholderBeanDefinitionParser(在ContextNameSpaceHandler的init中进行注册)
+	 * 对应的Handler为:ContextNameSpaceHandler
+	 * 本次示例的parser为:PropertyPlaceholderBeanDefinitionParser(在ContextNameSpaceHandler的init中进行注册)
+	 * <p>
+	 * 参考
 	 *
-	 * 	参考
 	 * @see org.springframework.context.config.ContextNamespaceHandler
 	 * 思考：什么时候配置好的，什么时候开始加载的，什么时候开始真正doParse
 	 */
@@ -66,12 +69,13 @@ public class BeanLearnTest {
 
 	/**
 	 * 位置
-	 *  核心方法：prepareBeanFactory->beanFactory.addPropertyEditorRegistrar
-	 *	实际注册时机：populateBean前的initBeanWrapper方法将editor注册到当前BeanWrapper
-	 *  实际处理：populateBean属性字段填充时applyPropertyValues方法
+	 * 核心方法：prepareBeanFactory->beanFactory.addPropertyEditorRegistrar
+	 * 实际注册时机：populateBean前的initBeanWrapper方法将editor注册到当前BeanWrapper
+	 * 实际处理：populateBean属性字段填充时applyPropertyValues方法
 	 * 参考
-	 * @see org.springframework.jmx.export.CustomDateEditorRegistrar
 	 *
+	 * @see org.springframework.jmx.export.CustomDateEditorRegistrar
+	 * <p>
 	 * 思考：什么时候配置好的，什么时候开始注册PropertyEditor的，什么时候开始真正setAsText
 	 */
 	@Test

@@ -125,6 +125,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 							}
 						}
 						if (containsSingleton(beanName)) {
+							// 放入FactoryBean缓存object
 							this.factoryBeanObjectCache.put(beanName, object);
 						}
 					}

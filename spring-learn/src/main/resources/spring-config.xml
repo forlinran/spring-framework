@@ -56,4 +56,14 @@
 
 	<!--自定义BD BFPP-->
 	<bean id="myBeanDefinitionBFPP" class="com.linran.bean.selfbdrpp.MyBeanDefinitionRegistryPostProcessor"/>
+
+	<!--配置自定义converter-->
+<!--	<bean id="conversionService"-->
+<!--		  class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+<!--		<property name="converters">-->
+<!--			<set>-->
+<!--				<bean class="com.linran.bean.selfconvert.StudentConverter"/>-->
+<!--			</set>-->
+<!--		</property>-->
+<!--	</bean>-->
 </beans>

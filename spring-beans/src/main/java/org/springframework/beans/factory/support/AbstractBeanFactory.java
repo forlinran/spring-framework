@@ -1404,10 +1404,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 				else {
 					// Child bean definition: needs to be merged with parent.
+					// 子bean需要与父bean合并
 					BeanDefinition pbd;
 					try {
 						String parentBeanName = transformedBeanName(bd.getParentName());
 						if (!beanName.equals(parentBeanName)) {
+							// 递归获取父bean信息
 							pbd = getMergedBeanDefinition(parentBeanName);
 						}
 						else {
@@ -1427,6 +1429,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 								"Could not resolve parent bean definition '" + bd.getParentName() + "'", ex);
 					}
 					// Deep copy with overridden values.
+					// 深拷贝父bean信息
 					mbd = new RootBeanDefinition(pbd);
 					mbd.overrideFrom(bd);
 				}
