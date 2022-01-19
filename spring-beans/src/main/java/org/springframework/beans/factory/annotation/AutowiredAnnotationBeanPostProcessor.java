@@ -243,7 +243,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
+		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null); // @Autowired注入的方法
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -253,6 +253,18 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		this.injectionMetadataCache.remove(beanName);
 	}
 
+	/**
+	 * 获取构造器集合
+	 * 		如果有多个Autowired， required 为true，不管有没有默认构造方法，会报异常
+	 * 		如果只有一个Autowired. required为false，没有默认构造方法，会报警告
+	 * 		如果没有Autowired注解，定义了两个及以上有参数的构造方法，没有无参构造方法，就会报错
+	 * 		其他情况都可以，但是以有Autowired的构造方法优先，然后才是默认构造方法
+	 *
+	 * @param beanClass the raw class of the bean (never {@code null})
+	 * @param beanName the name of the bean
+	 * @return
+	 * @throws BeanCreationException
+	 */
 	@Override
 	@Nullable
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, final String beanName)
@@ -471,7 +483,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
-				MergedAnnotation<?> ann = findAutowiredAnnotation(field);
+				MergedAnnotation<?> ann = findAutowiredAnnotation(field); //@Autowired、@Value标注的字段
 				if (ann != null) {
 					if (Modifier.isStatic(field.getModifiers())) {
 						if (logger.isInfoEnabled()) {

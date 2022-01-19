@@ -291,8 +291,8 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName);
-		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null);
+		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName); // 寻找生命周期方法@PostConstruct、@PreDestruct，并缓存下来(此时未调用)
+		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null); // @Resource用于方法、字段上元素进行缓存
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -362,7 +362,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 		do {
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
-
+			// 字段处理
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
 				if (webServiceRefClass != null && field.isAnnotationPresent(webServiceRefClass)) {
 					if (Modifier.isStatic(field.getModifiers())) {
@@ -385,7 +385,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					}
 				}
 			});
-
+			// 方法处理
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 				Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {

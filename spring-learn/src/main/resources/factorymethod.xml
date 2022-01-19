@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:linran="https://www.linran.com/custag/linran"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   https://www.linran.com/custag/linran https://www.linran.com/custag/linran/linran-student.xsd
+	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--静态工厂-->
+	<bean id="person1" class="com.linran.bean.factorymethod.PersonStaticFactory" factory-method="getPerson">
+		<constructor-arg value="张麻子"/>
+	</bean>
+	<!--实例工厂-->
+	<bean id="personInstantFactory" class="com.linran.bean.factorymethod.PersonInstantFactory"/>
+	<bean id="person2" class="com.linran.bean.factorymethod.Person" factory-bean="personInstantFactory" factory-method="getPerson">
+		<constructor-arg value="王老五"/>
+	</bean>
+</beans>

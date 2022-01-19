@@ -457,7 +457,7 @@ public abstract class ReflectionUtils {
 
 	private static Method[] getDeclaredMethods(Class<?> clazz, boolean defensive) {
 		Assert.notNull(clazz, "Class must not be null");
-		Method[] result = declaredMethodsCache.get(clazz);
+		Method[] result = declaredMethodsCache.get(clazz); //返回所有申明的方法
 		if (result == null) {
 			try {
 				Method[] declaredMethods = clazz.getDeclaredMethods();
@@ -474,7 +474,7 @@ public abstract class ReflectionUtils {
 				else {
 					result = declaredMethods;
 				}
-				declaredMethodsCache.put(clazz, (result.length == 0 ? EMPTY_METHOD_ARRAY : result));
+				declaredMethodsCache.put(clazz, (result.length == 0 ? EMPTY_METHOD_ARRAY : result));// 缓存之前解析出的本地方法
 			}
 			catch (Throwable ex) {
 				throw new IllegalStateException("Failed to introspect Class [" + clazz.getName() +

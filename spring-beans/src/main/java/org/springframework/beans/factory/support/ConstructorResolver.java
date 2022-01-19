@@ -397,10 +397,14 @@ class ConstructorResolver {
 		BeanWrapperImpl bw = new BeanWrapperImpl();
 		this.beanFactory.initBeanWrapper(bw);
 
+		// 实例工厂
 		Object factoryBean;
+		// 工厂类信息
 		Class<?> factoryClass;
+		// 是否静态的
 		boolean isStatic;
 
+		// 工厂实例bean创建对象
 		String factoryBeanName = mbd.getFactoryBeanName();
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
@@ -415,6 +419,7 @@ class ConstructorResolver {
 			factoryClass = factoryBean.getClass();
 			isStatic = false;
 		}
+		// 静态工厂创建对象
 		else {
 			// It's a static factory method on the bean class.
 			if (!mbd.hasBeanClass()) {
@@ -453,6 +458,7 @@ class ConstructorResolver {
 		if (factoryMethodToUse == null || argsToUse == null) {
 			// Need to determine the factory method...
 			// Try all methods with this name to see if they match the given arguments.
+			// 获取工厂class
 			factoryClass = ClassUtils.getUserClass(factoryClass);
 
 			List<Method> candidates = null;
@@ -466,14 +472,14 @@ class ConstructorResolver {
 			}
 			if (candidates == null) {
 				candidates = new ArrayList<>();
-				Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);
+				Method[] rawCandidates = getCandidateMethods(factoryClass, mbd); //获取候选的method方法
 				for (Method candidate : rawCandidates) {
 					if (Modifier.isStatic(candidate.getModifiers()) == isStatic && mbd.isFactoryMethod(candidate)) {
 						candidates.add(candidate);
 					}
 				}
 			}
-
+			// 方法无参
 			if (candidates.size() == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Method uniqueCandidate = candidates.get(0);
 				if (uniqueCandidate.getParameterCount() == 0) {
@@ -504,7 +510,9 @@ class ConstructorResolver {
 			else {
 				// We don't have arguments passed in programmatically, so we need to resolve the
 				// arguments specified in the constructor arguments held in the bean definition.
+				// 方法有参
 				if (mbd.hasConstructorArgumentValues()) {
+					// 获取构造器参数
 					ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 					resolvedValues = new ConstructorArgumentValues();
 					minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);
@@ -536,8 +544,10 @@ class ConstructorResolver {
 							String[] paramNames = null;
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
 							if (pnd != null) {
+								//通过名称发现器返回构造器参数名称
 								paramNames = pnd.getParameterNames(candidate);
 							}
+							// 获取参数(会进行一些值转换)
 							argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw,
 									paramTypes, paramNames, candidate, autowiring, candidates.size() == 1);
 						}
@@ -634,7 +644,7 @@ class ConstructorResolver {
 				argsHolderToUse.storeCache(mbd, factoryMethodToUse);
 			}
 		}
-
+		// 实例化对象
 		bw.setBeanInstance(instantiate(beanName, mbd, factoryBean, factoryMethodToUse, argsToUse));
 		return bw;
 	}
@@ -674,7 +684,7 @@ class ConstructorResolver {
 				new BeanDefinitionValueResolver(this.beanFactory, beanName, mbd, converter);
 
 		int minNrOfArgs = cargs.getArgumentCount();
-
+		// <constructor-arg index/>设置的参数
 		for (Map.Entry<Integer, ConstructorArgumentValues.ValueHolder> entry : cargs.getIndexedArgumentValues().entrySet()) {
 			int index = entry.getKey();
 			if (index < 0) {
@@ -697,7 +707,7 @@ class ConstructorResolver {
 				resolvedValues.addIndexedArgumentValue(index, resolvedValueHolder);
 			}
 		}
-
+		// <constructor-arg value="xx"/>设置的参数
 		for (ConstructorArgumentValues.ValueHolder valueHolder : cargs.getGenericArgumentValues()) {
 			if (valueHolder.isConverted()) {
 				resolvedValues.addGenericArgumentValue(valueHolder);
@@ -733,10 +743,12 @@ class ConstructorResolver {
 
 		for (int paramIndex = 0; paramIndex < paramTypes.length; paramIndex++) {
 			Class<?> paramType = paramTypes[paramIndex];
+			//参数名称
 			String paramName = (paramNames != null ? paramNames[paramIndex] : "");
 			// Try to find matching constructor argument value, either indexed or generic.
 			ConstructorArgumentValues.ValueHolder valueHolder = null;
 			if (resolvedValues != null) {
+				//获取参数值holder
 				valueHolder = resolvedValues.getArgumentValue(paramIndex, paramType, paramName, usedValueHolders);
 				// If we couldn't find a direct match and are not supposed to autowire,
 				// let's try the next generic, untyped argument value as fallback:
@@ -745,11 +757,14 @@ class ConstructorResolver {
 					valueHolder = resolvedValues.getGenericArgumentValue(null, null, usedValueHolders);
 				}
 			}
+			// 判断通过参数名是否为空
 			if (valueHolder != null) {
 				// We found a potential match - let's give it a try.
 				// Do not consider the same value definition multiple times!
 				usedValueHolders.add(valueHolder);
+				// 获取原始参数值
 				Object originalValue = valueHolder.getValue();
+				// 获取转换值
 				Object convertedValue;
 				if (valueHolder.isConverted()) {
 					convertedValue = valueHolder.getConvertedValue();
@@ -774,8 +789,8 @@ class ConstructorResolver {
 						args.preparedArguments[paramIndex] = sourceValue;
 					}
 				}
-				args.arguments[paramIndex] = convertedValue;
-				args.rawArguments[paramIndex] = originalValue;
+				args.arguments[paramIndex] = convertedValue; //转换值
+				args.rawArguments[paramIndex] = originalValue; //原始值
 			}
 			else {
 				MethodParameter methodParam = MethodParameter.forExecutable(executable, paramIndex);

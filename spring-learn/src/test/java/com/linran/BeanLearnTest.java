@@ -1,10 +1,14 @@
 package com.linran;
 
 import com.linran.bean.*;
+import com.linran.bean.factorymethod.Person;
+import com.linran.bean.lifecycle.LifeCycle;
 import com.linran.bean.methodoverrides.Fruit;
 import com.linran.bean.methodoverrides.FruitPlate;
+import com.linran.bean.resolvebeforeinstantiation.Car;
 import com.linran.bean.selfeditor.Customer;
 import com.linran.bean.selftag.Student;
+import com.linran.bean.supplier.Gopher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.xml.PluggableSchemaResolver;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -108,6 +112,52 @@ public class BeanLearnTest {
 		FruitPlate fruitplate3 = context.getBean("fruitplate1", FruitPlate.class);
 		Fruit fruit3 = fruitplate1.getFruit();
 		System.out.println("fruit3==fruit1 :"+ (fruit1==fruit3));
+	}
+
+	/**
+	 * doCreateBean之前执行resolveBeforeInstantiation方法的时候，通过BPP返回自定义的动态代理对象
+	 */
+	@Test
+	public void resolveBeforeInstantiationTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:resolvebeforeinstantiation.xml");
+		Car car = context.getBean("car", Car.class);
+		car.run();
+	}
+
+	/**
+	 * beanDefinition.resolvedConstructorOrFactoryMethod属性
+	 * 第一次实例化后，所用的构造器会缓存起来; prototype原型模式才会在第二次调用的时候出现
+	 */
+	@Test
+	public void prototypeTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:resolvedConstructorOrFactoryMethod.xml");
+		Person person1 =  context.getBean("prototypePerson", Person.class);
+		Person person2 =  context.getBean("prototypePerson", Person.class);
+	}
+
+	/**
+	 * aware接口调用,@PostConstruct,@PreDestruct
+	 */
+	@Test
+	public void lifeCycleTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:lifecycle.xml");
+		LifeCycle lifecycle = context.getBean("lifecycle", LifeCycle.class);
+	}
+
+	/**
+	 * supplier创建bean对象
+	 */
+	@Test
+	public void supplierTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:supplier.xml");
+		Gopher gopher = context.getBean("gopher", Gopher.class);
+	}
+
+	@Test
+	public void factoryMethodTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:factorymethod.xml");
+		Person person1 = context.getBean("person1", Person.class);
+		Person person2 = context.getBean("person2", Person.class);
 	}
 
 	//其他一些小demo

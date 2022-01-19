@@ -63,6 +63,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
 			synchronized (bd.constructorArgumentLock) {
+				// 从beanDefinition中获取之前创建bean时缓存过的构造函数，显然第一次创建时是为空的
 				constructorToUse = (Constructor<?>) bd.resolvedConstructorOrFactoryMethod;
 				if (constructorToUse == null) {
 					final Class<?> clazz = bd.getBeanClass();
@@ -78,6 +79,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 							// 默认无参构造器
 							constructorToUse = clazz.getDeclaredConstructor();
 						}
+						// 将构造器缓存到beanDefinition中，方便下次使用(prototype时)
 						bd.resolvedConstructorOrFactoryMethod = constructorToUse;
 					}
 					catch (Throwable ex) {

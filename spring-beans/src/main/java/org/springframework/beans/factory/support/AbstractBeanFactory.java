@@ -299,7 +299,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					return (T) parentBeanFactory.getBean(nameToLookup);
 				}
 			}
-
+			// 标记bean已经创建了
 			if (!typeCheckOnly) {
 				markBeanAsCreated(beanName);
 			}
@@ -333,7 +333,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						}
 					}
 				}
-
+				// 单例的bean创建
 				// Create bean instance.
 				if (mbd.isSingleton()) {
 					// 创建Bean对象，注意这里的lambda表达式
@@ -353,7 +353,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// FactoryBean接口实现类，通过该方法获取正真目标对象
 					beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
-
+				// 原型模式的bean创建
 				else if (mbd.isPrototype()) {
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
