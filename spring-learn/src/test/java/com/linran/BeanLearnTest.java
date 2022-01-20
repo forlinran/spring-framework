@@ -27,6 +27,13 @@ public class BeanLearnTest {
 		System.out.printf("this is logoP printf:%s%n", logoP.toString());
 	}
 
+	/**
+	 * 循环依赖
+	 * 三级缓存_存在的意义是为了解决代理类带来的循环依赖问题
+	 * 代理类是在BFF.after调用创建的(实例化，完成初始化后，放入一级缓存前)
+	 * 如果有循环依赖则在属性赋值通过getEarlyReference方法提前创建代理对象将其暴露（此时被当作属性赋值的对象还未完成初始化）
+	 *
+	 */
 	@Test
 	public void circleDependencyTest() {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
