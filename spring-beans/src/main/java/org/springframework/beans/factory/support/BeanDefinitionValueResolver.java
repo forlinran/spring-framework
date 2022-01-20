@@ -200,13 +200,13 @@ class BeanDefinitionValueResolver {
 			});
 			return copy;
 		}
-		else if (value instanceof TypedStringValue) {
+		else if (value instanceof TypedStringValue) { // 字符串类型解析
 			// Convert value to target type here.
 			TypedStringValue typedStringValue = (TypedStringValue) value;
 			Object valueObject = evaluate(typedStringValue);
 			try {
 				Class<?> resolvedTargetType = resolveTargetType(typedStringValue);
-				if (resolvedTargetType != null) {
+				if (resolvedTargetType != null) { //TypeConvert按类型进行值解析
 					return this.typeConverter.convertIfNecessary(valueObject, resolvedTargetType);
 				}
 				else {

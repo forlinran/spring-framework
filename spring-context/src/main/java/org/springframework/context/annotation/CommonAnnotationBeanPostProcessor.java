@@ -365,19 +365,19 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			// 字段处理
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
 				if (webServiceRefClass != null && field.isAnnotationPresent(webServiceRefClass)) {
-					if (Modifier.isStatic(field.getModifiers())) {
+					if (Modifier.isStatic(field.getModifiers())) { // 不支持静态字段
 						throw new IllegalStateException("@WebServiceRef annotation is not supported on static fields");
 					}
 					currElements.add(new WebServiceRefElement(field, field, null));
 				}
 				else if (ejbClass != null && field.isAnnotationPresent(ejbClass)) {
-					if (Modifier.isStatic(field.getModifiers())) {
+					if (Modifier.isStatic(field.getModifiers())) { // 不支持静态字段
 						throw new IllegalStateException("@EJB annotation is not supported on static fields");
 					}
 					currElements.add(new EjbRefElement(field, field, null));
 				}
 				else if (field.isAnnotationPresent(Resource.class)) {
-					if (Modifier.isStatic(field.getModifiers())) {
+					if (Modifier.isStatic(field.getModifiers())) { // 不支持静态字段
 						throw new IllegalStateException("@Resource annotation is not supported on static fields");
 					}
 					if (!this.ignoredResourceTypes.contains(field.getType().getName())) {
@@ -393,7 +393,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 				}
 				if (method.equals(ClassUtils.getMostSpecificMethod(method, clazz))) {
 					if (webServiceRefClass != null && bridgedMethod.isAnnotationPresent(webServiceRefClass)) {
-						if (Modifier.isStatic(method.getModifiers())) {
+						if (Modifier.isStatic(method.getModifiers())) { // 不支持静态字段
 							throw new IllegalStateException("@WebServiceRef annotation is not supported on static methods");
 						}
 						if (method.getParameterCount() != 1) {
@@ -403,7 +403,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 						currElements.add(new WebServiceRefElement(method, bridgedMethod, pd));
 					}
 					else if (ejbClass != null && bridgedMethod.isAnnotationPresent(ejbClass)) {
-						if (Modifier.isStatic(method.getModifiers())) {
+						if (Modifier.isStatic(method.getModifiers())) { // 不支持静态字段
 							throw new IllegalStateException("@EJB annotation is not supported on static methods");
 						}
 						if (method.getParameterCount() != 1) {
@@ -413,7 +413,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 						currElements.add(new EjbRefElement(method, bridgedMethod, pd));
 					}
 					else if (bridgedMethod.isAnnotationPresent(Resource.class)) {
-						if (Modifier.isStatic(method.getModifiers())) {
+						if (Modifier.isStatic(method.getModifiers())) { // 不支持静态字段
 							throw new IllegalStateException("@Resource annotation is not supported on static methods");
 						}
 						Class<?>[] paramTypes = method.getParameterTypes();

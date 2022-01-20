@@ -1,6 +1,7 @@
 package com.linran;
 
 import com.linran.bean.*;
+import com.linran.bean.autowire.School;
 import com.linran.bean.factorymethod.Person;
 import com.linran.bean.lifecycle.LifeCycle;
 import com.linran.bean.methodoverrides.Fruit;
@@ -160,7 +161,20 @@ public class BeanLearnTest {
 		Person person2 = context.getBean("person2", Person.class);
 	}
 
-	//其他一些小demo
+	/**
+	 * AutowiredAnnotationBeanPostProcessor对@Autowired的解析处理
+	 * 位置:doCreateBean#applyMergedBeanDefinitionPostProcessors
+	 */
+	@Test
+	public void autowiredAnnotationBeanPostProcessorTest() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:autowiredbpp.xml");
+		School school = context.getBean(School.class);
+		school.hello();
+	}
+
+	/**
+	 * populateBean
+	 */
 	@Test
 	public void applicationContext() {
 		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:spring-config.xml");

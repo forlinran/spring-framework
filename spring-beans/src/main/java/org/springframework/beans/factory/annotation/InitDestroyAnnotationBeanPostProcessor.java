@@ -148,6 +148,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
 		// 寻找生命周期方法
 		LifecycleMetadata metadata = findLifecycleMetadata(beanType);
+		// 往beanDefinition注册生命周期方法
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -298,8 +299,9 @@ public class InitDestroyAnnotationBeanPostProcessor
 		public void checkConfigMembers(RootBeanDefinition beanDefinition) {
 			Set<LifecycleElement> checkedInitMethods = new LinkedHashSet<>(this.initMethods.size());
 			for (LifecycleElement element : this.initMethods) {
-				String methodIdentifier = element.getIdentifier(); // 初始方法名
+				String methodIdentifier = element.getIdentifier();
 				if (!beanDefinition.isExternallyManagedInitMethod(methodIdentifier)) {
+					// 注册初始化方法
 					beanDefinition.registerExternallyManagedInitMethod(methodIdentifier);
 					checkedInitMethods.add(element);
 					if (logger.isTraceEnabled()) {
@@ -311,6 +313,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 			for (LifecycleElement element : this.destroyMethods) {
 				String methodIdentifier = element.getIdentifier(); // 销毁方法名
 				if (!beanDefinition.isExternallyManagedDestroyMethod(methodIdentifier)) {
+					// 注册销毁方法
 					beanDefinition.registerExternallyManagedDestroyMethod(methodIdentifier);
 					checkedDestroyMethods.add(element);
 					if (logger.isTraceEnabled()) {

@@ -1641,7 +1641,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (scopeName != null) {
 				scope = getRegisteredScope(scopeName);
 			}
-		}
+		}//SpEL解析
 		return this.beanExpressionResolver.evaluate(value, new BeanExpressionContext(this, scope));
 	}
 
