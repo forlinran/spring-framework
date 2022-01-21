@@ -1,6 +1,7 @@
 package com.linran;
 
 import com.linran.bean.*;
+import com.linran.bean.aop.MathCalculator;
 import com.linran.bean.autowire.School;
 import com.linran.bean.factorymethod.Person;
 import com.linran.bean.lifecycle.LifeCycle;
@@ -32,7 +33,6 @@ public class BeanLearnTest {
 	 * 三级缓存_存在的意义是为了解决代理类带来的循环依赖问题
 	 * 代理类是在BFF.after调用创建的(实例化，完成初始化后，放入一级缓存前)
 	 * 如果有循环依赖则在属性赋值通过getEarlyReference方法提前创建代理对象将其暴露（此时被当作属性赋值的对象还未完成初始化）
-	 *
 	 */
 	@Test
 	public void circleDependencyTest() {
@@ -105,7 +105,7 @@ public class BeanLearnTest {
 	 * 方便下次直接获取,那么如果是原型作用域的话，会创建一个新的对象
 	 * 如果想在一个单例模式的bean下引用一个原型模式的bean,
 	 * 怎么办?在此时就需要引用lookup-method标签来解决此问题
-	 *
+	 * <p>
 	 * 如果apple&banana是原型模式，则每次都是getBean的时候获取最新的bean
 	 */
 	@Test
@@ -119,7 +119,7 @@ public class BeanLearnTest {
 
 		FruitPlate fruitplate3 = context.getBean("fruitplate1", FruitPlate.class);
 		Fruit fruit3 = fruitplate1.getFruit();
-		System.out.println("fruit3==fruit1 :"+ (fruit1==fruit3));
+		System.out.println("fruit3==fruit1 :" + (fruit1 == fruit3));
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class BeanLearnTest {
 	@Test
 	public void prototypeTest() {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:resolvedConstructorOrFactoryMethod.xml");
-		Person person1 =  context.getBean("prototypePerson", Person.class);
-		Person person2 =  context.getBean("prototypePerson", Person.class);
+		Person person1 = context.getBean("prototypePerson", Person.class);
+		Person person2 = context.getBean("prototypePerson", Person.class);
 	}
 
 	/**
@@ -183,10 +183,20 @@ public class BeanLearnTest {
 	 * populateBean
 	 */
 	@Test
-	public void applicationContext() {
+	public void populateBeanTest() {
 		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:spring-config.xml");
 		Logo logoP = context.getBean(Logo.class);
 		System.out.printf("this is logoP printf:%s%n", logoP.toString());
+	}
+
+	/**
+	 * 代理类调试
+	 */
+	@Test
+	public void aopTest() {
+		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:aop.xml");
+		MathCalculator calculator = context.getBean(MathCalculator.class);
+		calculator.add(1, 2);
 	}
 
 	@Test

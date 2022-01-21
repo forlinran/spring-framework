@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 将需要加载到IOC容器中的bean配置好 -->
+	<bean id="mathCalculator" class="com.linran.bean.aop.MathCalculator"></bean>
+	<bean id="logAspectp1" class="com.linran.bean.aop.LogAspect"></bean>
+<!--	<bean id="logAspectp2" class="com.linran.bean.aop.LogAspect"></bean>-->
+	<!-- 配置AOP,需要导入AOP名称空间 -->
+	<aop:config>
+		<!-- 声明切入点表达式 -->
+		<aop:pointcut expression="execution(public * com.linran.bean.aop.MathCalculator.*(..))" id="pointcut"/>
+		<!-- 配置日志切面类,引用前面的类 ,通过order属性控制优先级-->
+		<aop:aspect ref="logAspectp1" order="20">
+			<!-- 通过method属性指定切面类的切面方法，通过pointcut-ref指定切入点表达式 -->
+			<aop:before method="showBeginLog" pointcut-ref="pointcut"/>
+			<aop:after method="showAfterLog" pointcut-ref="pointcut"/>
+			<aop:after-throwing method="showExceptionLog" pointcut-ref="pointcut" throwing="ex"/>
+			<aop:after-returning method="showReturnLog" pointcut-ref="pointcut" returning="result"/>
+		</aop:aspect>
+<!--		<aop:aspect ref="logAspectp2" order="10">-->
+<!--			<aop:around method="showLog" pointcut-ref="pointcut"/>-->
+<!--		</aop:aspect>-->
+	</aop:config>
+</beans>

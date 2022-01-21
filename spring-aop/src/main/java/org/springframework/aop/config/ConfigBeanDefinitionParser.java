@@ -102,19 +102,19 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		CompositeComponentDefinition compositeDef =
 				new CompositeComponentDefinition(element.getTagName(), parserContext.extractSource(element));
 		parserContext.pushContainingComponent(compositeDef);
-
+		// 配置代理类internalAutoProxyCreator
 		configureAutoProxyCreator(parserContext, element);
 
 		List<Element> childElts = DomUtils.getChildElements(element);
 		for (Element elt: childElts) {
 			String localName = parserContext.getDelegate().getLocalName(elt);
-			if (POINTCUT.equals(localName)) {
+			if (POINTCUT.equals(localName)) { // pointcut解析
 				parsePointcut(elt, parserContext);
 			}
-			else if (ADVISOR.equals(localName)) {
+			else if (ADVISOR.equals(localName)) { //advisor解析
 				parseAdvisor(elt, parserContext);
 			}
-			else if (ASPECT.equals(localName)) {
+			else if (ASPECT.equals(localName)) { // aspect解析
 				parseAspect(elt, parserContext);
 			}
 		}
@@ -216,7 +216,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			boolean adviceFoundAlready = false;
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Node node = nodeList.item(i);
-				if (isAdviceNode(node, parserContext)) {
+				if (isAdviceNode(node, parserContext)) { // before、after、after-returning、after-throwing、around
 					if (!adviceFoundAlready) {
 						adviceFoundAlready = true;
 						if (!StringUtils.hasText(aspectName)) {
@@ -224,18 +224,18 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 									"<aspect> tag needs aspect bean reference via 'ref' attribute when declaring advices.",
 									aspectElement, this.parseState.snapshot());
 							return;
-						}
+						} // runtimeBeanReference封装
 						beanReferences.add(new RuntimeBeanReference(aspectName));
 					}
 					AbstractBeanDefinition advisorDefinition = parseAdvice(
 							aspectName, i, aspectElement, (Element) node, parserContext, beanDefinitions, beanReferences);
-					beanDefinitions.add(advisorDefinition);
+					beanDefinitions.add(advisorDefinition); // beanDefinition添加
 				}
 			}
 
 			AspectComponentDefinition aspectComponentDefinition = createAspectComponentDefinition(
 					aspectElement, aspectId, beanDefinitions, beanReferences, parserContext);
-			parserContext.pushContainingComponent(aspectComponentDefinition);
+			parserContext.pushContainingComponent(aspectComponentDefinition); // 通过popAndRegisterContainingComponent添加进
 
 			List<Element> pointcuts = DomUtils.getChildElementsByTagName(aspectElement, POINTCUT);
 			for (Element pointcutElement : pointcuts) {
@@ -331,12 +331,12 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			aspectFactoryDef.getPropertyValues().add("aspectBeanName", aspectName);
 			aspectFactoryDef.setSynthetic(true);
 
-			// register the pointcut
+			// register the pointcut 封装为AbstractAspectJAdvice通知对象
 			AbstractBeanDefinition adviceDef = createAdviceDefinition(
 					adviceElement, parserContext, aspectName, order, methodDefinition, aspectFactoryDef,
 					beanDefinitions, beanReferences);
 
-			// configure the advisor
+			// configure the advisor 最终包装为AspectJPointcutAdvisor对象
 			RootBeanDefinition advisorDefinition = new RootBeanDefinition(AspectJPointcutAdvisor.class);
 			advisorDefinition.setSource(parserContext.extractSource(adviceElement));
 			advisorDefinition.getConstructorArgumentValues().addGenericArgumentValue(adviceDef);
@@ -365,7 +365,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 			Element adviceElement, ParserContext parserContext, String aspectName, int order,
 			RootBeanDefinition methodDef, RootBeanDefinition aspectFactoryDef,
 			List<BeanDefinition> beanDefinitions, List<BeanReference> beanReferences) {
-
+		// getAdviceClass创建Advice实现类
 		RootBeanDefinition adviceDefinition = new RootBeanDefinition(getAdviceClass(adviceElement, parserContext));
 		adviceDefinition.setSource(parserContext.extractSource(adviceElement));
 
@@ -387,7 +387,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 		ConstructorArgumentValues cav = adviceDefinition.getConstructorArgumentValues();
 		cav.addIndexedArgumentValue(METHOD_INDEX, methodDef);
-
+		// 创建pointCut对象
 		Object pointcut = parsePointcutProperty(adviceElement, parserContext);
 		if (pointcut instanceof BeanDefinition) {
 			cav.addIndexedArgumentValue(POINTCUT_INDEX, pointcut);
@@ -434,14 +434,14 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 * Pointcut with the BeanDefinitionRegistry.
 	 */
 	private AbstractBeanDefinition parsePointcut(Element pointcutElement, ParserContext parserContext) {
-		String id = pointcutElement.getAttribute(ID);
-		String expression = pointcutElement.getAttribute(EXPRESSION);
+		String id = pointcutElement.getAttribute(ID); // id
+		String expression = pointcutElement.getAttribute(EXPRESSION); // 需要拦截的表达式
 
 		AbstractBeanDefinition pointcutDefinition = null;
 
 		try {
 			this.parseState.push(new PointcutEntry(id));
-			pointcutDefinition = createPointcutDefinition(expression);
+			pointcutDefinition = createPointcutDefinition(expression); // 创建pointcut.beanDefinition对象
 			pointcutDefinition.setSource(parserContext.extractSource(pointcutElement));
 
 			String pointcutBeanName = id;

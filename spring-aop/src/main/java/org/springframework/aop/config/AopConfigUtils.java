@@ -84,7 +84,7 @@ public abstract class AopConfigUtils {
 	@Nullable
 	public static BeanDefinition registerAspectJAutoProxyCreatorIfNecessary(
 			BeanDefinitionRegistry registry, @Nullable Object source) {
-
+		// 注册internalAutoProxyCreator(AspectJAwareAdvisorAutoProxyCreator)
 		return registerOrEscalateApcAsRequired(AspectJAwareAdvisorAutoProxyCreator.class, registry, source);
 	}
 
@@ -119,7 +119,7 @@ public abstract class AopConfigUtils {
 			Class<?> cls, BeanDefinitionRegistry registry, @Nullable Object source) {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
-
+		// 找寻注册的internalAutoProxyCreator（beanDefinition），并比较优先级，设置优先级较高的
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
@@ -131,12 +131,12 @@ public abstract class AopConfigUtils {
 			}
 			return null;
 		}
-
+		// 没有的话则注册名为internalAutoProxyCreator的BeanDefinition
 		RootBeanDefinition beanDefinition = new RootBeanDefinition(cls);
 		beanDefinition.setSource(source);
-		beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);
+		beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE); // 优先级最高
 		beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		registry.registerBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME, beanDefinition);
+		registry.registerBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME, beanDefinition); // 最后注册BeanDefinition
 		return beanDefinition;
 	}
 
