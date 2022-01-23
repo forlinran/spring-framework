@@ -43,6 +43,8 @@ public class AspectJPointcutAdvisor implements PointcutAdvisor, Ordered {
 
 
 	/**
+	 * 构造器参数为通知实现类
+	 *
 	 * Create a new AspectJPointcutAdvisor for the given advice.
 	 * @param advice the AbstractAspectJAdvice to wrap
 	 */

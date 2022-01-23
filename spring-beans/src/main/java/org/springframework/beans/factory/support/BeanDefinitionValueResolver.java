@@ -128,7 +128,7 @@ class BeanDefinitionValueResolver {
 			return resolveInnerBean(argName, bdHolder.getBeanName(), bdHolder.getBeanDefinition());
 		}
 		else if (value instanceof BeanDefinition) {
-			// Resolve plain BeanDefinition, without contained name: use dummy name.
+			// Resolve plain BeanDefinition, without contained name: use dummy name. 内部bean创建
 			BeanDefinition bd = (BeanDefinition) value;
 			String innerBeanName = "(inner bean)" + BeanFactoryUtils.GENERATED_BEAN_NAME_SEPARATOR +
 					ObjectUtils.getIdentityHexString(bd);
@@ -362,7 +362,7 @@ class BeanDefinitionValueResolver {
 			if (mbd.isSingleton()) {
 				actualInnerBeanName = adaptInnerBeanName(innerBeanName);
 			}
-			this.beanFactory.registerContainedBean(actualInnerBeanName, this.beanName);
+			this.beanFactory.registerContainedBean(actualInnerBeanName, this.beanName); // 注意这里不是往beanDefinitionMap中注册
 			// Guarantee initialization of beans that the inner bean depends on.
 			String[] dependsOn = mbd.getDependsOn();
 			if (dependsOn != null) {
@@ -373,7 +373,7 @@ class BeanDefinitionValueResolver {
 			}
 			// Actually create the inner bean instance now...
 			Object innerBean = this.beanFactory.createBean(actualInnerBeanName, mbd, null);
-			if (innerBean instanceof FactoryBean) {
+			if (innerBean instanceof FactoryBean) { // 如果是factoryBean对象，则通过getObject获取正真的对象
 				boolean synthetic = mbd.isSynthetic();
 				innerBean = this.beanFactory.getObjectFromFactoryBean(
 						(FactoryBean<?>) innerBean, actualInnerBeanName, !synthetic);

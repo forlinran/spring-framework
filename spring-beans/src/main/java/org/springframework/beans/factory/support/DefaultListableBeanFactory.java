@@ -590,7 +590,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							}
 						}
 						if (matchFound) {
-							result.add(beanName);
+							result.add(beanName); // 存放匹配结果
 						}
 					}
 				}

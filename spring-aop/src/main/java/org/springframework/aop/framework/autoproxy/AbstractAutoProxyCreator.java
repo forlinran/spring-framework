@@ -249,8 +249,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (!StringUtils.hasLength(beanName) || !this.targetSourcedBeans.contains(beanName)) {
 			if (this.advisedBeans.containsKey(cacheKey)) {
 				return null;
-			}
-			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
+			}// 是否基础类Advice、Pointcut、Advisor、AopInfrastructureBean
+			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) { // shouldSkip会去创建AspectJPointcutAdvisor
 				this.advisedBeans.put(cacheKey, Boolean.FALSE);
 				return null;
 			}

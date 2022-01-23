@@ -73,7 +73,7 @@ public class MethodLocatingFactoryBean implements FactoryBean<Method>, BeanFacto
 		Class<?> beanClass = beanFactory.getType(this.targetBeanName);
 		if (beanClass == null) {
 			throw new IllegalArgumentException("Can't determine type of bean with name '" + this.targetBeanName + "'");
-		}
+		} // 反射设置方法method属性
 		this.method = BeanUtils.resolveSignature(this.methodName, beanClass);
 
 		if (this.method == null) {
@@ -86,7 +86,7 @@ public class MethodLocatingFactoryBean implements FactoryBean<Method>, BeanFacto
 	@Override
 	@Nullable
 	public Method getObject() throws Exception {
-		return this.method;
+		return this.method; // 最终返回的是method反射对象
 	}
 
 	@Override
