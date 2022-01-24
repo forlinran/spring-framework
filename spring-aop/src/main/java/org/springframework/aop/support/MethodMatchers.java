@@ -345,7 +345,7 @@ public abstract class MethodMatchers {
 		}
 
 		@Override
-		public boolean matches(Method method, Class<?> targetClass, boolean hasIntroductions) {
+		public boolean matches(Method method, Class<?> targetClass, boolean hasIntroductions) { // 排除切面内的方法
 			return (MethodMatchers.matches(this.mm1, method, targetClass, hasIntroductions) &&
 					MethodMatchers.matches(this.mm2, method, targetClass, hasIntroductions));
 		}

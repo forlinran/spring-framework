@@ -98,7 +98,7 @@ public abstract class AbstractBeanFactoryBasedTargetSourceCreator
 		if (logger.isDebugEnabled()) {
 			logger.debug("Configuring AbstractBeanFactoryBasedTargetSource: " + targetSource);
 		}
-
+		// 创建内部bean工厂
 		DefaultListableBeanFactory internalBeanFactory = getInternalBeanFactoryForBean(beanName);
 
 		// We need to override just this bean definition, as it may reference other beans
@@ -109,11 +109,11 @@ public abstract class AbstractBeanFactoryBasedTargetSourceCreator
 		if (isPrototypeBased()) {
 			bdCopy.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		}
-		internalBeanFactory.registerBeanDefinition(beanName, bdCopy);
+		internalBeanFactory.registerBeanDefinition(beanName, bdCopy); // 内部bean工厂注册bd
 
 		// Complete configuring the PrototypeTargetSource.
 		targetSource.setTargetBeanName(beanName);
-		targetSource.setBeanFactory(internalBeanFactory);
+		targetSource.setBeanFactory(internalBeanFactory); // 将内部工厂设置到targetSource上
 
 		return targetSource;
 	}
@@ -138,7 +138,7 @@ public abstract class AbstractBeanFactoryBasedTargetSourceCreator
 	protected DefaultListableBeanFactory buildInternalBeanFactory(ConfigurableBeanFactory containingFactory) {
 		// Set parent so that references (up container hierarchies) are correctly resolved.
 		DefaultListableBeanFactory internalBeanFactory = new DefaultListableBeanFactory(containingFactory);
-
+		// 拷贝当前工厂配置参数
 		// Required so that all BeanPostProcessors, Scopes, etc become available.
 		internalBeanFactory.copyConfigurationFrom(containingFactory);
 

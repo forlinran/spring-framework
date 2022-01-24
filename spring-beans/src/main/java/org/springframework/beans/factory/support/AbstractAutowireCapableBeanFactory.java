@@ -531,7 +531,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
-			// 执行BPP看是否返回一个代理类，是的话就不再走后续的doCreateBean流程；
+			// 执行BPP看是否返回一个代理类(用户自定义实现的动态代理)，是的话就不再走后续的doCreateBean流程；
 			// 代理相关的类 如pointCut，advisor通知类会提前创建好
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {

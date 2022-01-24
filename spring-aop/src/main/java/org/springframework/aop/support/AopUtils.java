@@ -224,7 +224,7 @@ public abstract class AopUtils {
 	public static boolean canApply(Pointcut pc, Class<?> targetClass, boolean hasIntroductions) {
 		Assert.notNull(pc, "Pointcut must not be null");
 		if (!pc.getClassFilter().matches(targetClass)) {
-			return false;
+			return false; // 如果类不匹配则直接返回
 		}
 
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
@@ -240,14 +240,14 @@ public abstract class AopUtils {
 
 		Set<Class<?>> classes = new LinkedHashSet<>();
 		if (!Proxy.isProxyClass(targetClass)) {
-			classes.add(ClassUtils.getUserClass(targetClass));
+			classes.add(ClassUtils.getUserClass(targetClass)); // 添加目标类
 		}
-		classes.addAll(ClassUtils.getAllInterfacesForClassAsSet(targetClass));
+		classes.addAll(ClassUtils.getAllInterfacesForClassAsSet(targetClass)); //添加接口类
 
 		for (Class<?> clazz : classes) {
 			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
 			for (Method method : methods) {
-				if (introductionAwareMethodMatcher != null ?
+				if (introductionAwareMethodMatcher != null ? // 进行方法匹配
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions) :
 						methodMatcher.matches(method, targetClass)) {
 					return true;
@@ -286,7 +286,7 @@ public abstract class AopUtils {
 		}
 		else if (advisor instanceof PointcutAdvisor) {
 			PointcutAdvisor pca = (PointcutAdvisor) advisor;
-			return canApply(pca.getPointcut(), targetClass, hasIntroductions);
+			return canApply(pca.getPointcut(), targetClass, hasIntroductions); // 拿到切点的expression，和目标类信息进行判断是否需要应用
 		}
 		else {
 			// It doesn't have a pointcut so we assume it applies.
@@ -308,7 +308,7 @@ public abstract class AopUtils {
 		}
 		List<Advisor> eligibleAdvisors = new ArrayList<>();
 		for (Advisor candidate : candidateAdvisors) {
-			if (candidate instanceof IntroductionAdvisor && canApply(candidate, clazz)) {
+			if (candidate instanceof IntroductionAdvisor && canApply(candidate, clazz)) { // IntroductionAdvisor引介，用于方法
 				eligibleAdvisors.add(candidate);
 			}
 		}
@@ -318,7 +318,7 @@ public abstract class AopUtils {
 				// already processed
 				continue;
 			}
-			if (canApply(candidate, clazz, hasIntroductions)) {
+			if (canApply(candidate, clazz, hasIntroductions)) { // 处理非IntroductionAdvisor引介，一般增强通知就在此处判断
 				eligibleAdvisors.add(candidate);
 			}
 		}

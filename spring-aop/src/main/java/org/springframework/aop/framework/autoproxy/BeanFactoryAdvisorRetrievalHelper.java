@@ -72,7 +72,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 			// uninitialized to let the auto-proxy creator apply to them!
 			advisorNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors( // 寻找容器中所有的AdvisorBean(切点对象)的BeanName
 					this.beanFactory, Advisor.class, true, false);
-			this.cachedAdvisorBeanNames = advisorNames;
+			this.cachedAdvisorBeanNames = advisorNames; // 缓存起来
 		}
 		if (advisorNames.length == 0) {
 			return new ArrayList<>();
