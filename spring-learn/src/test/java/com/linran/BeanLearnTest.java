@@ -196,7 +196,7 @@ public class BeanLearnTest {
 	public void aopTest() {
 		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:aop.xml");
 		MathCalculator calculator = context.getBean(MathCalculator.class);
-		calculator.add(1, 2);
+		calculator.div(1, 2);
 	}
 
 	@Test

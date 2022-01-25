@@ -1,10 +1,9 @@
 package com.linran.bean.aop;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.aspectj.lang.annotation.Pointcut;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +18,7 @@ public class LogAspect {
 	public void logPintCut() {
 	}
 
-//	@Before("logPintCut()")
+	//	@Before("logPintCut()")
 	public void showBeginLog(JoinPoint jPoint) {
 		Object[] args = jPoint.getArgs();//获取方法参数
 		List<Object> asList = Arrays.asList(args);//转化成List集合
@@ -29,24 +28,27 @@ public class LogAspect {
 		System.out.println("目标方法名：" + name + "，参数列表：" + asList);
 	}
 
-//	@After("logPintCut()")
+	//	@After("logPintCut()")
 	public void showAfterLog() {
 		System.out.println("LogAspectp1-----AOP方法结束");
 	}
 
-//	@AfterThrowing(value = "logPintCut()", throwing = "ex")
+	//	@AfterThrowing(value = "logPintCut()", throwing = "ex")
 	public void showExceptionLog(Exception ex) {
 		System.out.println("LogAspectp1-----AOP方法异常");
 		System.out.println("异常信息:" + ex.getMessage());
 	}
 
-//	@AfterReturning(value = "pointCut()", returning = "result")
+	//	@AfterReturning(value = "pointCut()", returning = "result")
 	public void showReturnLog(Object result) {
 		System.out.println("方法返回值:" + result);
 		System.out.println("LogAspectp1-----AOP方法最终返回");
 	}
 
-	public void showLog() {
-		System.out.println("show log...");
+	public Object showLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+		System.out.println("around advice before:show log...");
+		Object ret = proceedingJoinPoint.proceed();
+		System.out.println("around advice after:show log...");
+		return ret;
 	}
 }

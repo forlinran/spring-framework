@@ -84,6 +84,7 @@ public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Se
 		}
 		for (AdvisorAdapter adapter : this.adapters) {
 			if (adapter.supportsAdvice(advice)) {
+				// AfterReturningAdviceInterceptor MethodBeforeAdviceInterceptor ThrowsAdviceInterceptor
 				interceptors.add(adapter.getInterceptor(advisor));
 			}
 		}

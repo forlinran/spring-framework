@@ -86,7 +86,7 @@ public class MethodInvocationProceedingJoinPoint implements ProceedingJoinPoint,
 	@Override
 	@Nullable
 	public Object proceed() throws Throwable {
-		return this.methodInvocation.invocableClone().proceed();
+		return this.methodInvocation.invocableClone().proceed(); // mi.proceed MethodInvocationProceedingJoinPoint
 	}
 
 	@Override
