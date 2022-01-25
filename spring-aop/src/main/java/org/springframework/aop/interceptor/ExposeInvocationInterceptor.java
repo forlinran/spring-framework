@@ -92,9 +92,9 @@ public final class ExposeInvocationInterceptor implements MethodInterceptor, Pri
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		MethodInvocation oldInvocation = invocation.get();
-		invocation.set(mi);
+		invocation.set(mi); //把CglibMethodInvocation放入ThreadLocal中
 		try {
-			return mi.proceed();
+			return mi.proceed(); // 递归调用
 		}
 		finally {
 			invocation.set(oldInvocation);

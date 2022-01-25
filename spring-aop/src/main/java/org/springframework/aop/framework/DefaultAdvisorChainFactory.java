@@ -68,12 +68,12 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 					boolean match;
 					if (mm instanceof IntroductionAwareMethodMatcher) {
 						if (hasIntroductions == null) {
-							hasIntroductions = hasMatchingIntroductions(advisors, actualClass);
+							hasIntroductions = hasMatchingIntroductions(advisors, actualClass); // 匹配是否有引介增强
 						}
 						match = ((IntroductionAwareMethodMatcher) mm).matches(method, actualClass, hasIntroductions);
 					}
 					else {
-						match = mm.matches(method, actualClass);
+						match = mm.matches(method, actualClass); // 默认返回true
 					}
 					if (match) {
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);

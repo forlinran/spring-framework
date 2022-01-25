@@ -20,6 +20,7 @@
 			<aop:after method="showAfterLog" pointcut-ref="pointcut"/>
 			<aop:after-throwing method="showExceptionLog" pointcut-ref="pointcut" throwing="ex"/>
 			<aop:after-returning method="showReturnLog" pointcut-ref="pointcut" returning="result"/>
+			<aop:around method="showLog" pointcut-ref="pointcut"/>
 		</aop:aspect>
 <!--		<aop:aspect ref="logAspectp2" order="10">-->
 <!--			<aop:around method="showLog" pointcut-ref="pointcut"/>-->

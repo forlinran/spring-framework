@@ -46,7 +46,7 @@ public class LogAspect {
 		System.out.println("LogAspectp1-----AOP方法最终返回");
 	}
 
-//	public void showLog() {
-//		System.out.println("show log...");
-//	}
+	public void showLog() {
+		System.out.println("show log...");
+	}
 }

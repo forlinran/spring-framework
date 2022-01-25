@@ -101,7 +101,7 @@ public class ProxyCreatorSupport extends AdvisedSupport {
 	protected final synchronized AopProxy createAopProxy() {
 		if (!this.active) {
 			activate();
-		}
+		} // 创建具体的代理实现类 JDK or Cglib
 		return getAopProxyFactory().createAopProxy(this);
 	}
 
