@@ -121,7 +121,7 @@ final class PostProcessorRegistrationDelegate {
 			// 排序
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
 			registryProcessors.addAll(currentRegistryProcessors);
-			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry, beanFactory.getApplicationStartup());
+			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry, beanFactory.getApplicationStartup()); // 注解Bean扫描在此处进行,ConfigurationClassPostProcessor
 			currentRegistryProcessors.clear();
 
 			// 接着，调用实现了Ordered的BeanDefinitionRegistryPostProcessors

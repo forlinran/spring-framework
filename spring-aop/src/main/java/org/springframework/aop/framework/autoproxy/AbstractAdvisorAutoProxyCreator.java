@@ -95,7 +95,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
 		List<Advisor> candidateAdvisors = findCandidateAdvisors(); // 从容器中查找所有增强通知(AbstractAspectJAdvice子类)
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName); // 通过expression过滤出能应用的advisor
-		extendAdvisors(eligibleAdvisors); // 添加ExposeInvocationInterceptor
+		extendAdvisors(eligibleAdvisors); // 添加ExposeInvocationInterceptor!!!
 		if (!eligibleAdvisors.isEmpty()) {
 			eligibleAdvisors = sortAdvisors(eligibleAdvisors); // 拓朴排序
 		}

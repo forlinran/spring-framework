@@ -1,7 +1,9 @@
 package com.linran;
 
 import com.linran.bean.*;
-import com.linran.bean.aop.MathCalculator;
+import com.linran.bean.aop.annotation.AnnotationConfiguration;
+import com.linran.bean.aop.annotation.AnnotationMathCalculator;
+import com.linran.bean.aop.xml.MathCalculator;
 import com.linran.bean.autowire.School;
 import com.linran.bean.factorymethod.Person;
 import com.linran.bean.lifecycle.LifeCycle;
@@ -13,6 +15,7 @@ import com.linran.bean.selftag.Student;
 import com.linran.bean.supplier.Gopher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.xml.PluggableSchemaResolver;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BeanLearnTest {
@@ -193,9 +196,18 @@ public class BeanLearnTest {
 	 * 代理类调试
 	 */
 	@Test
-	public void aopTest() {
-		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:aop.xml");
+	public void aopXmlTest() {
+		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:aop-xml.xml");
 		MathCalculator calculator = context.getBean(MathCalculator.class);
+		calculator.div(1, 2);
+	}
+
+	@Test
+	public void aopAnnotationTest() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(AnnotationConfiguration.class);
+		context.refresh();
+		AnnotationMathCalculator calculator = context.getBean(AnnotationMathCalculator.class);
 		calculator.div(1, 2);
 	}
 

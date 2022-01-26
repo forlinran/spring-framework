@@ -1,6 +1,9 @@
-package com.linran.bean.aop;
+package com.linran.bean.aop.annotation;
 
-public class MathCalculator {
+import org.springframework.stereotype.Component;
+
+@Component
+public class AnnotationMathCalculator {
 	public void add(int i, int j) {
 		int result = i + j;
 		System.out.println("目标方法add(int)执行了");

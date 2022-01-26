@@ -1,4 +1,4 @@
-package com.linran.bean.aop;
+package com.linran.bean.aop.xml;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -13,10 +13,6 @@ import java.util.List;
 //@Configuration
 //@EnableAspectJAutoProxy
 public class LogAspect {
-
-	@Pointcut("execution(* com.linran.bean.aop.MathCalculator.*(..))")
-	public void logPintCut() {
-	}
 
 	//	@Before("logPintCut()")
 	public void showBeginLog(JoinPoint jPoint) {
