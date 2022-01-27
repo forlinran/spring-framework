@@ -102,7 +102,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		CompositeComponentDefinition compositeDef =
 				new CompositeComponentDefinition(element.getTagName(), parserContext.extractSource(element));
 		parserContext.pushContainingComponent(compositeDef);
-		// 配置代理类internalAutoProxyCreator
+		// 注册internalAutoProxyCreator#AspectJAwareAdvisorAutoProxyCreator的BeanDefinition
 		configureAutoProxyCreator(parserContext, element);
 
 		List<Element> childElts = DomUtils.getChildElements(element);
@@ -446,7 +446,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 			String pointcutBeanName = id;
 			if (StringUtils.hasText(pointcutBeanName)) {
-				parserContext.getRegistry().registerBeanDefinition(pointcutBeanName, pointcutDefinition);
+				parserContext.getRegistry().registerBeanDefinition(pointcutBeanName, pointcutDefinition); // 向容器中注册该beanDefinition
 			}
 			else {
 				pointcutBeanName = parserContext.getReaderContext().registerWithGeneratedName(pointcutDefinition);

@@ -13,6 +13,10 @@ dependencies {
     api project(":spring-context")
     api project(":spring-aop")
     api project(":spring-aspects")
+    api project(":spring-jdbc")
+    api project(":spring-tx")
+    implementation group: 'com.alibaba', name: 'druid', version: '1.2.8'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 //    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
 //    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

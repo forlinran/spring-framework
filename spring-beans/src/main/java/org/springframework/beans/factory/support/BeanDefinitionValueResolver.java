@@ -371,7 +371,7 @@ class BeanDefinitionValueResolver {
 					this.beanFactory.getBean(dependsOnBean);
 				}
 			}
-			// Actually create the inner bean instance now...
+			// Actually create the inner bean instance now... 创建内部bean对象
 			Object innerBean = this.beanFactory.createBean(actualInnerBeanName, mbd, null);
 			if (innerBean instanceof FactoryBean) { // 如果是factoryBean对象，则通过getObject获取正真的对象
 				boolean synthetic = mbd.isSynthetic();

@@ -961,7 +961,7 @@ public class BeanDefinitionParserDelegate {
 			if (!StringUtils.hasText(refName)) {
 				error(elementName + " contains empty 'ref' attribute", ele);
 			}
-			RuntimeBeanReference ref = new RuntimeBeanReference(refName);
+			RuntimeBeanReference ref = new RuntimeBeanReference(refName); // 构建允许时bean引用
 			ref.setSource(extractSource(ele));
 			return ref;
 		}

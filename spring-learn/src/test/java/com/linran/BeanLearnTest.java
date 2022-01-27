@@ -13,6 +13,7 @@ import com.linran.bean.resolvebeforeinstantiation.Car;
 import com.linran.bean.selfeditor.Customer;
 import com.linran.bean.selftag.Student;
 import com.linran.bean.supplier.Gopher;
+import com.linran.bean.tx.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.xml.PluggableSchemaResolver;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -209,6 +210,15 @@ public class BeanLearnTest {
 		context.refresh();
 		AnnotationMathCalculator calculator = context.getBean(AnnotationMathCalculator.class);
 		calculator.div(1, 2);
+	}
+
+	/**
+	 * 事务调试
+	 */
+	@Test
+	public void transactionTest() {
+		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:tx.xml");
+		BookService bookService = context.getBean(BookService.class);
 	}
 
 	@Test

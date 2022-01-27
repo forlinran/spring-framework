@@ -105,10 +105,10 @@ class TxAdviceBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 			nameHolder.setSource(parserContext.extractSource(methodEle));
 
 			RuleBasedTransactionAttribute attribute = new RuleBasedTransactionAttribute();
-			String propagation = methodEle.getAttribute(PROPAGATION_ATTRIBUTE);
-			String isolation = methodEle.getAttribute(ISOLATION_ATTRIBUTE);
-			String timeout = methodEle.getAttribute(TIMEOUT_ATTRIBUTE);
-			String readOnly = methodEle.getAttribute(READ_ONLY_ATTRIBUTE);
+			String propagation = methodEle.getAttribute(PROPAGATION_ATTRIBUTE); // 事务传播行为
+			String isolation = methodEle.getAttribute(ISOLATION_ATTRIBUTE); // 事务隔离级别
+			String timeout = methodEle.getAttribute(TIMEOUT_ATTRIBUTE); // 超时时间
+			String readOnly = methodEle.getAttribute(READ_ONLY_ATTRIBUTE); // 只读
 			if (StringUtils.hasText(propagation)) {
 				attribute.setPropagationBehaviorName(RuleBasedTransactionAttribute.PREFIX_PROPAGATION + propagation);
 			}
@@ -121,7 +121,7 @@ class TxAdviceBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 			if (StringUtils.hasText(readOnly)) {
 				attribute.setReadOnly(Boolean.parseBoolean(methodEle.getAttribute(READ_ONLY_ATTRIBUTE)));
 			}
-
+			// 回滚相关属性处理
 			List<RollbackRuleAttribute> rollbackRules = new ArrayList<>(1);
 			if (methodEle.hasAttribute(ROLLBACK_FOR_ATTRIBUTE)) {
 				String rollbackForValue = methodEle.getAttribute(ROLLBACK_FOR_ATTRIBUTE);
