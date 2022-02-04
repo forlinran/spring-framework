@@ -13,13 +13,14 @@ import com.linran.bean.resolvebeforeinstantiation.Car;
 import com.linran.bean.selfeditor.Customer;
 import com.linran.bean.selftag.Student;
 import com.linran.bean.supplier.Gopher;
-import com.linran.bean.tx.service.BookService;
+import com.linran.bean.tx.annotation.config.TransactionConfig;
+import com.linran.bean.tx.xml.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.xml.PluggableSchemaResolver;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BeanLearnTest {
+public class SpringLearnTest {
 
 	@Test
 	public void injectTest() {
@@ -216,9 +217,19 @@ public class BeanLearnTest {
 	 * 事务调试
 	 */
 	@Test
-	public void transactionTest() {
+	public void transactionXmlTest() {
 		MyClassPathXmlApplicationContext context = new MyClassPathXmlApplicationContext("classpath:tx.xml");
 		BookService bookService = context.getBean(BookService.class);
+		bookService.updateStock(1);
+	}
+
+	@Test
+	public void transactionAnnotationTest() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(TransactionConfig.class);
+		context.refresh();
+		com.linran.bean.tx.annotation.service.BookService bookService = context.getBean(com.linran.bean.tx.annotation.service.BookService.class);
+		bookService.updateStock(1);
 	}
 
 	@Test

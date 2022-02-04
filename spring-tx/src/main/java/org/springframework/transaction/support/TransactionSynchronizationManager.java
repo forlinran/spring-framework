@@ -72,22 +72,22 @@ import org.springframework.util.Assert;
  * @see org.springframework.jdbc.datasource.DataSourceUtils#getConnection
  */
 public abstract class TransactionSynchronizationManager {
-
+	// <dataSource,connectionHolder>
+	// 线程通过dataSource持有的对应链接
 	private static final ThreadLocal<Map<Object, Object>> resources =
 			new NamedThreadLocal<>("Transactional resources");
-
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
 			new NamedThreadLocal<>("Transaction synchronizations");
-
+	// 线程持有事务名称
 	private static final ThreadLocal<String> currentTransactionName =
 			new NamedThreadLocal<>("Current transaction name");
-
+	// 线程持有事务是否只读
 	private static final ThreadLocal<Boolean> currentTransactionReadOnly =
 			new NamedThreadLocal<>("Current transaction read-only status");
-
+	// 线程持有事务隔离级别
 	private static final ThreadLocal<Integer> currentTransactionIsolationLevel =
 			new NamedThreadLocal<>("Current transaction isolation level");
-
+	// 线程实际是否存在事务(含有TransactionStatus)
 	private static final ThreadLocal<Boolean> actualTransactionActive =
 			new NamedThreadLocal<>("Actual transaction active");
 
@@ -131,7 +131,9 @@ public abstract class TransactionSynchronizationManager {
 	 */
 	@Nullable
 	public static Object getResource(Object key) {
+		// 拿到目标数据源 例如：DruidDataSource，HikaliDataSource
 		Object actualKey = TransactionSynchronizationUtils.unwrapResourceIfNecessary(key);
+		// 拿到connectionHolder
 		return doGetResource(actualKey);
 	}
 
@@ -165,6 +167,7 @@ public abstract class TransactionSynchronizationManager {
 	 * @see ResourceTransactionManager#getResourceFactory()
 	 */
 	public static void bindResource(Object key, Object value) throws IllegalStateException {
+		// 绑定connectionHolder，到真正执行sql的时候会通过resources返回当前connection，如果没有会创建新链接
 		Object actualKey = TransactionSynchronizationUtils.unwrapResourceIfNecessary(key);
 		Assert.notNull(value, "Value must not be null");
 		Map<Object, Object> map = resources.get();

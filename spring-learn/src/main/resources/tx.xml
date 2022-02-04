@@ -7,7 +7,7 @@
 
 	<context:property-placeholder location="classpath:db.properties"/>
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
-		<property name="name" value="${datasource.username}"/>
+		<property name="username" value="${datasource.username}"/>
 		<property name="password" value="${datasource.password}"/>
 		<property name="url" value="${datasource.url}"/>
 		<property name="driverClassName" value="${datasource.driveClassName}"/>
@@ -18,14 +18,14 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
-	<bean id="bookService" class="com.linran.bean.tx.service.BookService">
+	<bean id="bookService" class="com.linran.bean.tx.xml.service.BookService">
 		<property name="bookDao" ref="bookDao"/>
 	</bean>
-	<bean id="bookDao" class="com.linran.bean.tx.dao.BookDao">
+	<bean id="bookDao" class="com.linran.bean.tx.xml.dao.BookDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"/>
 	</bean>
 	<aop:config>
-		<aop:pointcut id="txPoint" expression="execution(* com.linran.bean.tx.*.*.*(..))"/>
+		<aop:pointcut id="txPoint" expression="execution(* com.linran.bean.tx.xml..*.*(..))"/>
 		<aop:advisor advice-ref="myAdvice" pointcut-ref="txPoint"/>
 	</aop:config>
 	<tx:advice id="myAdvice" transaction-manager="transactionManager">

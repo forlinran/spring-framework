@@ -337,7 +337,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			return bean;
 		}
 
-		// Create proxy if we have advice. 通过class判断是否需要进行动态代理，如果是则返回对应的排好序的增强通知#同时添加ExposeInvocationInterceptor
+		// Create proxy if we have advice.
+		// 通过class判断是否需要进行动态代理，如果是则返回对应的排好序的增强通知#同时添加ExposeInvocationInterceptor
+		// 事务：与xml方式不同，注解在此处对方法上的@Transactional的attribute进行解析，xml在配置<tx:advice>就已经定义好了attribute
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		if (specificInterceptors != DO_NOT_PROXY) {
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
