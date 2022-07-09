@@ -6,6 +6,8 @@ import com.linran.bean.tx.annotation.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Collections;
+
 /**
  * 事务传播行为测试
  * 事务方法A调用事务方法B,反应得事务方法B的事务行为
@@ -22,7 +24,7 @@ public class TransactionPropagationTest {
 	}
 
 	/**
-	 * 事务内嵌nest
+	 * 事务内嵌nest.
 	 * 如果内层事务方法有进行catch
 	 * 1.内层嵌套事务发生异常，则仅回滚内嵌事务；回退到保存点
 	 * 2.外层事务发生异常，则嵌套事务跟随外层事务一起回滚
